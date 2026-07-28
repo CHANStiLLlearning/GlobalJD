@@ -1,6 +1,28 @@
 {
   "products": [
     {
+      "id": 1785209533514,
+      "name": "Coach Gallery Tote Bag in Crossgrain Leather",
+      "brand": "Apple",
+      "sku": "CCH-GAL-TOTE-BLK",
+      "price": 9999,
+      "originalPrice": 99999,
+      "category": "electronics",
+      "weight": "187 g",
+      "warranty": "1-Year Brand Warranty",
+      "description": "https://globaljd-backend.onrender.com",
+      "image": "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png",
+      "tag": {
+        "text": "Flash Deal",
+        "type": "discount",
+        "label": "-20%"
+      },
+      "inStock": true,
+      "discount": "20% Off",
+      "rating": "5.0 (1 review)",
+      "ratingValue": 5
+    },
+    {
       "id": 1785205347646,
       "name": "Coach Gallery Tote Bag in Crossgrain Leather",
       "brand": "Coach",
