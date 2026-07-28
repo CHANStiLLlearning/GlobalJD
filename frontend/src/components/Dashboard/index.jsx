@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { DollarSign, Package, Tags, Grid, CheckCircle, XCircle, RefreshCw, Radio } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { DollarSign, Package, Tags, Grid, CheckCircle, XCircle, RefreshCw, Radio, Wifi, WifiOff } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
 import FlashDealsAdmin from './FlashDealsAdmin';
@@ -12,6 +12,7 @@ import CustomersAdmin from './CustomersAdmin';
 import ProductsAdmin from './ProductsAdmin';
 import CustomItemsAdmin from './CustomItemsAdmin';
 import { API_BASE } from '../../config/api';
+import { supabase } from '../../config/supabase';
 import './Dashboard.css';
 
 export default function Dashboard({ setCurrentUser }) {
@@ -24,6 +25,8 @@ export default function Dashboard({ setCurrentUser }) {
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState(new Date());
+  const [realtimeStatus, setRealtimeStatus] = useState('connecting'); // 'connecting' | 'connected' | 'disconnected'
+  const channelRef = useRef(null);
 
   const fetchOverviewData = (isManual = false) => {
     if (isManual) setIsRefreshing(true);
@@ -34,7 +37,6 @@ export default function Dashboard({ setCurrentUser }) {
         return res.json();
       })
       .then(data => {
-        // Requirement 9: Console.log dashboard API response before rendering
         console.log('[FRONTEND DASHBOARD API RESPONSE]:', data);
 
         const statsData = data.stats || {};
@@ -58,7 +60,6 @@ export default function Dashboard({ setCurrentUser }) {
       })
       .catch(err => {
         console.error("Failed to fetch /api/admin/dashboard, falling back to /api/orders:", err);
-        // Fallback to legacy orders API if endpoint is unreachable
         fetch(`${API_BASE}/api/orders`)
           .then(res => res.json())
           .then(orders => {
@@ -76,18 +77,41 @@ export default function Dashboard({ setCurrentUser }) {
       });
   };
 
-  // Initial fetch and Realtime 3-second Polling Interval
+  // Setup Supabase Realtime subscription — instant push on any orders table change
   useEffect(() => {
     if (activeMenu !== 'overview') return;
 
+    // Initial data load
     fetchOverviewData();
 
-    // Setup 3-second realtime auto-sync polling
-    const timer = setInterval(() => {
-      fetchOverviewData();
-    }, 3000);
+    // Subscribe to Supabase Realtime on the orders table
+    const channel = supabase
+      .channel('dashboard-orders-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'orders' },
+        (payload) => {
+          console.log('[REALTIME] orders table changed:', payload.eventType, payload.new || payload.old);
+          // Immediately refetch full dashboard stats when any order changes
+          fetchOverviewData();
+        }
+      )
+      .subscribe((status) => {
+        console.log('[REALTIME] subscription status:', status);
+        if (status === 'SUBSCRIBED') setRealtimeStatus('connected');
+        else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') setRealtimeStatus('disconnected');
+        else setRealtimeStatus('connecting');
+      });
 
-    return () => clearInterval(timer);
+    channelRef.current = channel;
+
+    return () => {
+      // Cleanup subscription on unmount or menu change
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
+    };
   }, [activeMenu, timeFilter]);
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -140,16 +164,27 @@ export default function Dashboard({ setCurrentUser }) {
               <div>
                 <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   Dashboard Overview
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#dcfce7', color: '#15803d', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', border: '1px solid #86efac' }}>
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16a34a', boxShadow: '0 0 0 3px rgba(22,163,74,0.3)', animation: 'pulse 1.5s infinite' }}></span>
-                    REALTIME SYNC
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    background: realtimeStatus === 'connected' ? '#dcfce7' : realtimeStatus === 'disconnected' ? '#fee2e2' : '#fef9c3',
+                    color: realtimeStatus === 'connected' ? '#15803d' : realtimeStatus === 'disconnected' ? '#dc2626' : '#b45309',
+                    padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700',
+                    border: `1px solid ${realtimeStatus === 'connected' ? '#86efac' : realtimeStatus === 'disconnected' ? '#fca5a5' : '#fde68a'}`
+                  }}>
+                    <span style={{
+                      width: '8px', height: '8px', borderRadius: '50%',
+                      background: realtimeStatus === 'connected' ? '#16a34a' : realtimeStatus === 'disconnected' ? '#dc2626' : '#d97706',
+                      boxShadow: realtimeStatus === 'connected' ? '0 0 0 3px rgba(22,163,74,0.3)' : 'none',
+                      animation: realtimeStatus !== 'disconnected' ? 'pulse 1.5s infinite' : 'none'
+                    }}></span>
+                    {realtimeStatus === 'connected' ? '⚡ LIVE REALTIME' : realtimeStatus === 'disconnected' ? '✕ DISCONNECTED' : '◌ CONNECTING...'}
                   </span>
                 </h2>
                 <p style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>
-                  Live auto-updating inventory, customer purchases, and order statuses.
+                  Live auto-updating via Supabase WebSocket — instant push when orders are placed.
                 </p>
                 <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', fontWeight: '500' }}>
-                  Last Synced: {lastSyncTime.toLocaleTimeString()} (Polling every 3s)
+                  Last Synced: {lastSyncTime.toLocaleTimeString()} · Supabase WebSocket
                 </p>
               </div>
 
