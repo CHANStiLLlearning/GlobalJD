@@ -11,6 +11,8 @@ try {
   seedDataFromJson = null;
 }
 
+let memoryDbCache = null;
+
 // Ensure data directory exists if writable
 try {
   const dataDir = path.dirname(DB_FILE);
