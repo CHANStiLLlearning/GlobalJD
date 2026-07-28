@@ -25,6 +25,20 @@ export default function Dashboard({ setCurrentUser }) {
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState(new Date());
+
+  // Format date helper
+  const formatDateTime = (dateStr) => {
+    if (!dateStr) return 'Just now';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleString('en-US', {
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
   const [realtimeStatus, setRealtimeStatus] = useState('connecting'); // 'connecting' | 'connected' | 'disconnected'
   const channelRef = useRef(null);
 
@@ -346,7 +360,7 @@ export default function Dashboard({ setCurrentUser }) {
                                 {order.amount}
                               </td>
                               <td style={{ padding: '12px 16px', color: '#64748b', fontSize: '13px' }}>
-                                {order.date || 'Today'}
+                                {formatDateTime(order.date)}
                               </td>
                               <td style={{ padding: '12px 16px', textAlign: 'right' }}>
                                 <select
