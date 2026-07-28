@@ -1,0 +1,475 @@
+{
+  "products": [
+    {
+      "id": 1785205347646,
+      "name": "Coach Gallery Tote Bag in Crossgrain Leather",
+      "brand": "Coach",
+      "category": "Fashion > Bags",
+      "sku": "CCH-GAL-TOTE-BLK",
+      "price": 179.99,
+      "originalPrice": 328,
+      "discount": "14% Off",
+      "stockStatus": "In Stock (120 Units)",
+      "stockCount": 120,
+      "inStock": true,
+      "colors": [
+        "Black",
+        "Silver",
+        "Midnight Blue"
+      ],
+      "sizes": [
+        "One Size"
+      ],
+      "weight": "750 g",
+      "features": [
+        "Industry-leading Noise Cancellation with dual processors",
+        "Bluetooth 5.3 multi-point connectivity",
+        "30-hour battery life with 3-min quick charging for 3 hours",
+        "Crystal clear hands-free calling with 4 beamforming microphones"
+      ],
+      "specifications": {
+        "Bluetooth Version": "5.3",
+        "Battery Life": "30 Hours",
+        "Charging": "USB-C Fast Charging",
+        "Driver Size": "30 mm",
+        "Frequency Response": "4Hz - 40,000Hz",
+        "Impedance": "48 Ohm"
+      },
+      "packageIncludes": [
+        "Sony Headphones",
+        "USB-C Charging Cable",
+        "3.5mm Audio Cable",
+        "Carrying Case",
+        "User Manual"
+      ],
+      "benefits": [
+        "Unmatched comfort for long flights and work sessions",
+        "Immersive audiophile-grade high-res audio playback",
+        "Smart touch controls and wear detection",
+        "Ultra-lightweight ergonomic headband design"
+      ],
+      "warranty": "1-Year Brand Warranty",
+      "rating": "5.0 (1 review)",
+      "ratingValue": 5,
+      "customerReviews": [
+        {
+          "id": 101,
+          "username": "John Doe",
+          "rating": 5,
+          "date": "2026-07-20",
+          "comment": "Amazing sound quality and very comfortable! The active noise cancellation cuts out plane engine noise completely."
+        },
+        {
+          "id": 102,
+          "username": "Alice Smith",
+          "rating": 5,
+          "date": "2026-07-18",
+          "comment": "Battery lasts all week with daily commute usage. Very happy with this purchase."
+        },
+        {
+          "id": 103,
+          "username": "Marcus Vance",
+          "rating": 4,
+          "date": "2026-07-10",
+          "comment": "Sleek look and superb sound. Carrying case is top quality as well."
+        }
+      ],
+      "shippingInfo": "Free Express Shipping. Delivery in 3–5 Business Days.",
+      "returnPolicy": "30-Day Free Returns & Easy Exchanges",
+      "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80)",
+      "images": [
+        "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80)"
+      ],
+      "description": "The Coach Gallery Tote is crafted from durable, scratch-resistant crossgrain leather with smooth leather details and signature hardware. Built for everyday versatility, it features a spacious main compartment with secure zip-top closure, inside zip and multifunction pockets, and an exterior zip pocket for easy access to essentials.",
+      "tag": null
+    },
+    {
+      "id": 7,
+      "name": "Classic Merino Wool Trench Coat",
+      "brand": "Burberry Select",
+      "category": "Fashion > Men's Apparel",
+      "sku": "BUR-WOL-TRN-CAM",
+      "price": 249.99,
+      "originalPrice": 320,
+      "discount": "22% Off",
+      "stockStatus": "In Stock (40 Units)",
+      "stockCount": 40,
+      "inStock": true,
+      "colors": [
+        "Camel Beige",
+        "Charcoal Gray",
+        "Midnight Black"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "weight": "1.2 kg",
+      "features": [
+        "Premium 100% Australian Merino Wool blend for natural warmth",
+        "Double-breasted front with classic horn buttons and waist belt",
+        "Windproof & water-repellent exterior fabric treatment",
+        "Silky satin lining with inner passport security pocket"
+      ],
+      "specifications": {
+        "Outer Fabric": "85% Merino Wool, 15% Cashmere",
+        "Lining": "100% Viscose Satin",
+        "Closure": "Double-breasted Horn Buttons & Belt",
+        "Fit": "Tailored Slim Fit",
+        "Care Instructions": "Dry Clean Only"
+      },
+      "packageIncludes": [
+        "Merino Wool Trench Coat",
+        "Garment Travel Cover Bag",
+        "Hanger"
+      ],
+      "benefits": [
+        "Insulates against cold weather while remaining breathable",
+        "Tailored silhouette provides an elegant sophisticated look",
+        "Wrinkle-resistant fabric ideal for travel and business trips"
+      ],
+      "warranty": "1-Year Quality Guarantee",
+      "rating": "4.9 (210 reviews)",
+      "ratingValue": 4.9,
+      "customerReviews": [
+        {
+          "id": 701,
+          "username": "Oliver P.",
+          "rating": 5,
+          "date": "2026-07-21",
+          "comment": "Exquisite fabric texture and immaculate stitching. Worth every penny!"
+        }
+      ],
+      "shippingInfo": "Free Premium Express Shipping (2–4 Days).",
+      "returnPolicy": "30-Day Free Returns & Exchanges",
+      "tag": {
+        "text": "Trending",
+        "type": "new"
+      },
+      "image": "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80"
+      ],
+      "description": "A timeless staple piece for cold-weather wardrobe elegance, tailored from ultra-soft Merino wool with a modern double-breasted cut."
+    },
+    {
+      "id": 8,
+      "name": "Silk Floral Summer Evening Dress",
+      "brand": "ZARA Couture",
+      "category": "Fashion > Women's Apparel",
+      "sku": "ZAR-SLK-DRS-FLR",
+      "price": 129.99,
+      "originalPrice": 169.99,
+      "discount": "24% Off",
+      "stockStatus": "In Stock (75 Units)",
+      "stockCount": 75,
+      "inStock": true,
+      "colors": [
+        "Floral Cream",
+        "Rose Blush",
+        "Emerald Garden"
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L"
+      ],
+      "weight": "320 g",
+      "features": [
+        "100% Pure Mulberry Silk with lightweight flowy drape",
+        "Hand-printed botanical floral motif with subtle luster",
+        "Adjustable spaghetti straps and concealed side zipper",
+        "Breathable double layer lining prevents sheer transparency"
+      ],
+      "specifications": {
+        "Material": "100% Mulberry Silk",
+        "Lining": "100% Breathable Rayon",
+        "Neckline": "Cowl Neckline",
+        "Length": "Midi Length (115 cm)",
+        "Care": "Hand Wash Cold / Dry Clean"
+      },
+      "packageIncludes": [
+        "Silk Floral Dress",
+        "Silk Care Instructions Guide"
+      ],
+      "benefits": [
+        "Ultra-soft hypoallergenic feel on delicate skin",
+        "Flattering midi length suitable for summer parties and formal events",
+        "Vibrant long-lasting eco-friendly fabric dyes"
+      ],
+      "warranty": "1-Year Fabric Quality Guarantee",
+      "rating": "4.8 (380 reviews)",
+      "ratingValue": 4.8,
+      "customerReviews": [
+        {
+          "id": 801,
+          "username": "Sophia T.",
+          "rating": 5,
+          "date": "2026-07-25",
+          "comment": "Felt like a dream wearing this to a summer wedding! The silk quality is divine."
+        }
+      ],
+      "shippingInfo": "Free Standard Shipping (3–5 Days).",
+      "returnPolicy": "30-Day Free Returns",
+      "tag": {
+        "text": "Hot Pick",
+        "type": "discount"
+      },
+      "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80"
+      ],
+      "description": "Radiate effortless grace with this 100% Mulberry Silk floral midi dress, featuring a soft cowl neck and delicate hand-printed botanical pattern."
+    },
+    {
+      "id": 9,
+      "name": "Vintage Italian Leather Boots",
+      "brand": "Gucci Style",
+      "category": "Fashion > Footwear",
+      "sku": "GUC-LEA-BOOT-BRN",
+      "price": 210,
+      "originalPrice": 280,
+      "discount": "25% Off",
+      "stockStatus": "In Stock (50 Units)",
+      "stockCount": 50,
+      "inStock": true,
+      "colors": [
+        "Antique Cognac",
+        "Espresso Black"
+      ],
+      "sizes": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44"
+      ],
+      "weight": "1.1 kg",
+      "features": [
+        "Hand-burnished Italian calfskin leather upper",
+        "Goodyear welted rubber outsole for maximum grip and resoleability",
+        "Cushioned memory foam leather insole for all-day walkability",
+        "Side YKK zip closure with speed hook lace loops"
+      ],
+      "specifications": {
+        "Upper Material": "Hand-burnished Italian Leather",
+        "Sole Material": "Durable Anti-slip Goodyear Rubber",
+        "Insole": "Memory Foam Leather Footbed",
+        "Heel Height": "3.5 cm",
+        "Construction": "Goodyear Welted"
+      },
+      "packageIncludes": [
+        "Pair of Italian Leather Boots",
+        "Cotton Shoe Bags",
+        "Extra Waxed Laces"
+      ],
+      "benefits": [
+        "Provides supreme ankle support and shock absorption",
+        "Weather-resistant leather protects feet in rain and winter",
+        "Develops a unique rich patina with age"
+      ],
+      "warranty": "2-Year Craftsmanship Warranty",
+      "rating": "4.9 (510 reviews)",
+      "ratingValue": 4.9,
+      "customerReviews": [
+        {
+          "id": 901,
+          "username": "Daniel H.",
+          "rating": 5,
+          "date": "2026-07-22",
+          "comment": "Outstanding comfort right out of the box! Zero break-in pain."
+        }
+      ],
+      "shippingInfo": "Free Express Shipping (2–4 Days).",
+      "returnPolicy": "30-Day Free Returns",
+      "tag": {
+        "text": "Luxury",
+        "type": "global"
+      },
+      "image": "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=800&q=80"
+      ],
+      "description": "Handcrafted in Italy from hand-burnished calfskin leather, these Goodyear-welted boots blend rugged durability with refined European luxury."
+    },
+    {
+      "id": 5,
+      "name": "Minimalist Leather Backpack",
+      "brand": "Herschel",
+      "category": "Fashion > Bags",
+      "sku": "HER-LEA-BP-TAN",
+      "price": 89.99,
+      "originalPrice": 120,
+      "discount": "25% Off",
+      "stockStatus": "In Stock (60 Units)",
+      "stockCount": 60,
+      "inStock": true,
+      "colors": [
+        "Tan Brown",
+        "Midnight Black",
+        "Cognac"
+      ],
+      "sizes": [
+        "20 Liters"
+      ],
+      "weight": "950 g",
+      "features": [
+        "100% Genuine Full-Grain Top-Layer Italian Leather",
+        "Dedicated padded sleeve fits up to 16-inch laptops",
+        "Water-resistant interior lining with organizational pockets",
+        "Ergonomic padded shoulder straps with breathable mesh"
+      ],
+      "specifications": {
+        "Material": "Full-Grain Italian Leather",
+        "Capacity": "20 Liters",
+        "Laptop Sleeve": "Fits up to 16-inch MacBook",
+        "Dimensions": "42 cm x 30 cm x 15 cm",
+        "Zippers": "YKK Weatherproof Zippers"
+      },
+      "packageIncludes": [
+        "Leather Backpack",
+        "Dust Bag",
+        "Leather Care Balm"
+      ],
+      "benefits": [
+        "Timeless classic design that ages gracefully over time",
+        "Protects laptop and electronics from rain and impacts",
+        "Versatile usage for daily work commute or weekend trips"
+      ],
+      "warranty": "Lifetime Limited Warranty",
+      "rating": "4.6 (310 reviews)",
+      "ratingValue": 4.6,
+      "customerReviews": [
+        {
+          "id": 501,
+          "username": "Chris M.",
+          "rating": 5,
+          "date": "2026-07-19",
+          "comment": "High quality leather smell and craftsmanship!"
+        }
+      ],
+      "shippingInfo": "Free Standard Shipping in 3–5 Days.",
+      "returnPolicy": "30-Day Return Policy",
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80"
+      ],
+      "description": "Crafted from premium full-grain leather, this backpack offers refined elegance, modern organization, and long-lasting durability for daily travel."
+    },
+    {
+      "id": 6,
+      "name": "Designer Polarized Sunglasses",
+      "brand": "Ray-Ban",
+      "category": "Fashion > Eyewear",
+      "sku": "RAY-WAY-POL-GLD",
+      "price": 150,
+      "originalPrice": 200,
+      "discount": "25% Off",
+      "stockStatus": "In Stock (95 Units)",
+      "stockCount": 95,
+      "inStock": true,
+      "colors": [
+        "Gold / G-15 Green",
+        "Black / Dark Gray",
+        "Tortoise Shell"
+      ],
+      "sizes": [
+        "52mm Medium"
+      ],
+      "weight": "38 g",
+      "features": [
+        "100% UV400 Protection polarized glass lenses",
+        "Lightweight durable acetate and metal alloy frame"
+      ],
+      "specifications": {
+        "Lens Material": "Polarized Crystal Glass",
+        "UV Protection": "100% UV400",
+        "Lens Width": "52 mm"
+      },
+      "packageIncludes": [
+        "Designer Sunglasses",
+        "Leather Protective Case",
+        "Microfiber Cleaning Cloth"
+      ],
+      "benefits": [
+        "Enhances visual contrast and reduces eye fatigue",
+        "Scratch-resistant crystal glass optical clarity"
+      ],
+      "warranty": "2-Year Manufacturer Warranty",
+      "rating": "4.8 (640 reviews)",
+      "ratingValue": 4.8,
+      "customerReviews": [
+        {
+          "id": 601,
+          "username": "Hannah W.",
+          "rating": 5,
+          "date": "2026-07-23",
+          "comment": "Classic style! Polarized lenses make driving during sunny afternoons so comfortable."
+        }
+      ],
+      "shippingInfo": "Free Shipping. Delivery in 3–5 Business Days.",
+      "returnPolicy": "30-Day Free Returns",
+      "tag": {
+        "text": "Global",
+        "type": "global"
+      },
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80"
+      ],
+      "description": "Elevate your style with iconic polarized sunglasses featuring 100% UV protection and crystal clear optical glass lenses."
+    }
+  ],
+  "orders": [
+    {
+      "id": "#ORD-002",
+      "customer": "chan@gmail.com",
+      "product": "Ultralight Laptop Pro",
+      "amount": "$1299.99",
+      "status": "Shipped",
+      "date": "2026-07-28"
+    },
+    {
+      "id": "#ORD-001",
+      "customer": "chan@gmail.com",
+      "product": "Silk Floral Summer Evening Dress",
+      "amount": "$129.99",
+      "status": "Delivered",
+      "date": "2026-07-28"
+    }
+  ],
+  "storeSettings": {
+    "storeName": "GlobalJD",
+    "email": "admin@globaljd.com",
+    "currency": "USD",
+    "notifications": true
+  },
+  "users": [
+    {
+      "username": "admin",
+      "password": "password",
+      "role": "admin"
+    },
+    {
+      "username": "chan@gmail.com",
+      "password": "1234",
+      "role": "user"
+    }
+  ],
+  "wishlists": [],
+  "coupons": [
+    {
+      "code": "GLOBAL20",
+      "discountPercent": 20,
+      "active": true
+    }
+  ],
+  "reviews": [],
+  "customItems": []
+}
