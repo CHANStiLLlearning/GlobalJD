@@ -2,11 +2,18 @@ const fs = require('fs');
 const path = require('path');
 
 const DB_FILE = path.join(__dirname, 'data', 'database.json');
+const TMP_DB_FILE = path.join('/tmp', 'database.json');
 
-// Ensure data directory exists
-const dataDir = path.dirname(DB_FILE);
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
+let memoryDbCache = null;
+
+// Ensure data directory exists if writable
+try {
+  const dataDir = path.dirname(DB_FILE);
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem on serverless lambda
 }
 
 // Default Seed Data
@@ -491,14 +498,22 @@ const defaultData = {
   ]
 };
 
-// Read database from file
+// Read database from file or memory cache
 function readDb() {
+  if (memoryDbCache) return memoryDbCache;
+
   try {
-    if (!fs.existsSync(DB_FILE)) {
-      saveDb(defaultData);
+    let targetPath = DB_FILE;
+    if (!fs.existsSync(targetPath) && fs.existsSync(TMP_DB_FILE)) {
+      targetPath = TMP_DB_FILE;
+    }
+
+    if (!fs.existsSync(targetPath)) {
+      memoryDbCache = defaultData;
       return defaultData;
     }
-    const raw = fs.readFileSync(DB_FILE, 'utf8');
+
+    const raw = fs.readFileSync(targetPath, 'utf8');
     const data = JSON.parse(raw);
     
     // Ensure all tables exist
@@ -526,19 +541,26 @@ function readDb() {
       });
     }
 
+    memoryDbCache = data;
     return data;
   } catch (err) {
     console.error("Error reading database file, using fallback", err);
+    memoryDbCache = defaultData;
     return defaultData;
   }
 }
 
-// Write database to file
+// Write database to file or memory cache
 function saveDb(data) {
+  memoryDbCache = data;
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
   } catch (err) {
-    console.error("Error writing database file", err);
+    try {
+      fs.writeFileSync(TMP_DB_FILE, JSON.stringify(data, null, 2), 'utf8');
+    } catch (tmpErr) {
+      console.warn("Writing to /tmp failed, using memory cache", tmpErr);
+    }
   }
 }
 
