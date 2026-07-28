@@ -99,7 +99,80 @@ export default function Checkout({ currentUser, clearCart }) {
   }
 
   return (
-    <div className="container" style={{ padding: '40px 20px', minHeight: '60vh' }}>
+    <>
+    <style>{`
+      /* ===== Checkout Page — Mobile Responsive ===== */
+      .checkout-page {
+        padding: 40px 20px;
+        min-height: 60vh;
+      }
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 32px;
+      }
+      .checkout-order-col {
+        order: 2;
+      }
+      .checkout-form-col {
+        order: 1;
+      }
+      .checkout-name-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .checkout-card-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      @media (max-width: 768px) {
+        .checkout-page {
+          padding: 20px 16px;
+        }
+        .checkout-grid {
+          grid-template-columns: 1fr !important;
+          gap: 20px !important;
+        }
+        .checkout-order-col {
+          order: 1 !important;
+        }
+        .checkout-form-col {
+          order: 2 !important;
+        }
+        .checkout-name-row {
+          grid-template-columns: 1fr !important;
+        }
+        .checkout-card-row {
+          grid-template-columns: 1fr !important;
+        }
+        .checkout-summary-sticky {
+          position: static !important;
+        }
+        .checkout-title {
+          font-size: 22px !important;
+          margin-bottom: 20px !important;
+        }
+        .checkout-pay-btn {
+          font-size: 16px !important;
+          padding: 14px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .checkout-page {
+          padding: 16px 12px;
+        }
+        .checkout-title {
+          font-size: 18px !important;
+        }
+        .checkout-pay-btn {
+          font-size: 14px !important;
+        }
+      }
+    `}</style>
+    <div className="container checkout-page">
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '32px' }}>
         <button 
           onClick={() => navigate(-1)} 
@@ -109,18 +182,18 @@ export default function Checkout({ currentUser, clearCart }) {
         </button>
       </div>
 
-      <h1 style={{ fontSize: '28px', color: '#333', marginBottom: '32px' }}>Secure Checkout</h1>
+      <h1 className="checkout-title" style={{ fontSize: '28px', color: '#333', marginBottom: '32px' }}>Secure Checkout</h1>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px' }}>
+      <div className="checkout-grid">
         
         {/* Left Col - Forms */}
-        <div>
+        <div className="checkout-form-col">
           {/* Shipping Form */}
           <div style={{ background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', padding: '24px', marginBottom: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
             <h3 style={{ margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Truck size={20} color="var(--jd-red)" /> Shipping Details
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="checkout-name-row">
               <div>
                 <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>First Name</label>
                 <input type="text" placeholder="John" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box' }} required />
@@ -184,7 +257,7 @@ export default function Checkout({ currentUser, clearCart }) {
                     <input type="text" placeholder="0000 0000 0000 0000" maxLength="19" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '16px' }} required />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+                  <div className="checkout-card-row">
                     <div>
                       <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>Expiry Date</label>
                       <input type="text" placeholder="MM/YY" maxLength="5" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box' }} required />
@@ -210,6 +283,7 @@ export default function Checkout({ currentUser, clearCart }) {
               <button 
                 type="submit"
                 disabled={processing}
+                className="checkout-pay-btn"
                 style={{ 
                   width: '100%', padding: '16px', background: 'var(--jd-red)', color: '#fff', 
                   border: 'none', borderRadius: '4px', fontSize: '18px', fontWeight: 'bold',
@@ -233,8 +307,8 @@ export default function Checkout({ currentUser, clearCart }) {
         </div>
 
         {/* Right Col - Order Summary */}
-        <div>
-          <div style={{ background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', padding: '24px', position: 'sticky', top: '24px' }}>
+        <div className="checkout-order-col">
+          <div className="checkout-summary-sticky" style={{ background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', padding: '24px', position: 'sticky', top: '24px' }}>
             <h3 style={{ margin: '0 0 16px 0', paddingBottom: '16px', borderBottom: '1px solid #eaeaea' }}>Order Summary</h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px', maxHeight: '300px', overflowY: 'auto' }}>
@@ -276,5 +350,6 @@ export default function Checkout({ currentUser, clearCart }) {
 
       </div>
     </div>
+    </>
   );
 }
