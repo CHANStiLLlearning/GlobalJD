@@ -4,7 +4,12 @@ const path = require('path');
 const DB_FILE = path.join(__dirname, 'data', 'database.json');
 const TMP_DB_FILE = path.join('/tmp', 'database.json');
 
-let memoryDbCache = null;
+let seedDataFromJson;
+try {
+  seedDataFromJson = require('./data/database.json');
+} catch (e) {
+  seedDataFromJson = null;
+}
 
 // Ensure data directory exists if writable
 try {
@@ -508,9 +513,11 @@ function readDb() {
       targetPath = TMP_DB_FILE;
     }
 
+    const initialFallback = seedDataFromJson || defaultData;
+
     if (!fs.existsSync(targetPath)) {
-      memoryDbCache = defaultData;
-      return defaultData;
+      memoryDbCache = initialFallback;
+      return initialFallback;
     }
 
     const raw = fs.readFileSync(targetPath, 'utf8');
