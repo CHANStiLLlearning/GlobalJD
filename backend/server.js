@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
@@ -6,11 +7,25 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Universal CORS middleware — guarantees CORS headers on all requests, errors, and preflights
+// Universal CORS middleware — guarantees CORS headers on ALL requests (including errors & cold starts)
+const ALLOWED_ORIGINS = [
+  'https://global-jd.vercel.app',
+  'https://global-c1bb2r632-chanstilllearnings-projects.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin;
+  // Allow all vercel.app subdomains + explicit origins
+  if (!origin || ALLOWED_ORIGINS.includes(origin) || /\.vercel\.app$/.test(origin)) {
+    res.header('Access-Control-Allow-Origin', origin || '*');
+  } else {
+    res.header('Access-Control-Allow-Origin', '*');
+  }
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -18,10 +33,18 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: '*',
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || /\.vercel\.app$/.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all for now; tighten in production
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true
 }));
+
 app.use(express.json());
 
 // Helper — pick between Supabase and JSON file fallback

@@ -110,12 +110,12 @@ export default function ProductsAdmin() {
                 </tr>
               </thead>
               <tbody>
-                {items.length === 0 ? (
+                {filteredProducts.length === 0 ? (
                   <tr>
                     <td colSpan="5" style={{ textAlign: 'center', padding: '24px' }}>No products found.</td>
                   </tr>
                 ) : (
-                  items.map((item) => (
+                  filteredProducts.map((item) => (
                     <tr key={item.id}>
                       <td className="font-medium" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <img src={item.image} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #e5e7eb' }} />
