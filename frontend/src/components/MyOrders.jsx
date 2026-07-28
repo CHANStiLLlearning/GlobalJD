@@ -10,6 +10,20 @@ export default function MyOrders({ currentUser }) {
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
   const [lastSync, setLastSync] = useState(new Date());
 
+  // Format order date & time nicely
+  const formatDateTime = (dateStr) => {
+    if (!dateStr) return 'N/A';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleString('en-US', {
+        weekday: 'short', year: 'numeric', month: 'short',
+        day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
   const fetchUserOrders = () => {
     if (currentUser) {
       fetch(`${API_BASE}/api/orders?username=${currentUser.username}`)
@@ -94,7 +108,10 @@ export default function MyOrders({ currentUser }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                   <div>
                     <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600', fontFamily: 'monospace' }}>Order ID: {order.id}</div>
-                    <h3 style={{ margin: '4px 0 0 0', color: '#0f172a', fontSize: '18px', fontWeight: '700' }}>{order.product}</h3>
+                    <div style={{ color: '#94a3b8', fontSize: '12px', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span>🕐</span> {formatDateTime(order.date)}
+                    </div>
+                    <h3 style={{ margin: '6px 0 0 0', color: '#0f172a', fontSize: '17px', fontWeight: '700' }}>{order.product}</h3>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--jd-red)' }}>{order.amount}</div>
@@ -190,7 +207,7 @@ export default function MyOrders({ currentUser }) {
               </div>
               <div style={{ textAlign: 'right' }}>
                 <p style={{ margin: '0 0 4px 0', fontSize: '12px', color: '#666', textTransform: 'uppercase', fontWeight: 'bold' }}>Date Issued:</p>
-                <p style={{ margin: 0, color: '#333', fontWeight: '500' }}>{new Date().toLocaleDateString()}</p>
+                <p style={{ margin: 0, color: '#333', fontWeight: '600' }}>{formatDateTime(selectedOrder.date)}</p>
               </div>
             </div>
 

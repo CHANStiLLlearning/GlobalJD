@@ -462,7 +462,7 @@ app.post('/api/orders', async (req, res) => {
       product: String(product).trim(),
       amount: typeof amount === 'number' ? `$${amount.toFixed(2)}` : String(amount),
       status: status || 'Processing',
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString()
     };
 
     let saved;
