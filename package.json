@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm run build",
+    "build": "node -e \"const {execSync} = require('child_process'), fs = require('fs'); if (fs.existsSync('frontend')) { execSync('cd frontend && npm run build', {stdio:'inherit'}); } else { execSync('npm run build', {stdio:'inherit'}); }\"",
     "start": "node backend/server.js"
   },
   "dependencies": {
