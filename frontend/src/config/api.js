@@ -1,10 +1,17 @@
-// Auto-detects correct API URL:
-// 1. Use VITE_API_URL environment variable if set (Vercel production with Render backend)
-// 2. Use localhost:5000 for local development
-// 3. Use relative /api for Vercel serverless fallback
-export const API_BASE = 
-  import.meta.env.VITE_API_URL 
-    ? import.meta.env.VITE_API_URL 
-    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:5000' 
-        : 'https://globaljd.onrender.com');
+// Auto-detects and normalizes the correct API URL for all environments:
+// 1. Normalizes VITE_API_URL if set (fixes globaljd-backend -> globaljd URL typos)
+// 2. Uses http://localhost:5000 for local development
+// 3. Fallbacks to production https://globaljd.onrender.com
+
+let rawUrl = import.meta.env.VITE_API_URL;
+
+if (rawUrl && typeof rawUrl === 'string') {
+  // Auto-correct any leftover typo in Vercel environment variable
+  rawUrl = rawUrl.replace('globaljd-backend.onrender.com', 'globaljd.onrender.com').replace(/\/+$/, '');
+}
+
+export const API_BASE = (rawUrl && rawUrl.length > 0)
+  ? rawUrl
+  : (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? 'http://localhost:5000'
+      : 'https://globaljd.onrender.com');
