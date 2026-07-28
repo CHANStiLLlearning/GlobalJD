@@ -1,6 +1,28 @@
 {
   "products": [
     {
+      "id": 1785211028630,
+      "name": "Coach Gallery Tote Bag in Crossgrain Leather",
+      "brand": "Coach",
+      "sku": "",
+      "price": 222,
+      "originalPrice": 3333,
+      "category": "Fashion > Bags",
+      "weight": "250 g",
+      "warranty": "2-Year Limited Manufacturer Warranty",
+      "description": "\n\n1\nFind in logs\nCtrlF\nRunning build in Washington, D.C., USA (East) – iad1\nBuild machine configuration: 2 cores, 8 GB\nCloning github.com/CHANStiLLlearning/GlobalJD (Branch: main, Commit: 1bf4544)\nSkipping build cache, deployment was triggered without cache.\nCloning completed: 441.000ms\nRunning \"vercel build\"\nVercel CLI 56.5.0\nInstalling dependencies...\nadded 40 packages in 5s\n15 packages are looking for funding\n  run `npm fund` for details\nsh: line 1: cd: frontend: No such file or directory\nError: Command \"cd frontend && npm run build\" exited with 1",
+      "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80",
+      "tag": {
+        "text": "Flash Deal",
+        "type": "discount",
+        "label": "-20%"
+      },
+      "inStock": true,
+      "discount": "20% Off",
+      "rating": "5.0 (1 review)",
+      "ratingValue": 5
+    },
+    {
       "id": 1785209533514,
       "name": "Coach Gallery Tote Bag in Crossgrain Leather",
       "brand": "Apple",

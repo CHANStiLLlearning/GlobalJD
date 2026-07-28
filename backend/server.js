@@ -137,6 +137,37 @@ app.patch('/api/products/:id/toggle-stock', (req, res) => {
   res.status(404).json({ error: "Product not found" });
 });
 
+// Toggle or update Flash Deal status for any catalog item
+app.patch('/api/products/:id/flash-deal', (req, res) => {
+  const db = getDb();
+  const id = parseInt(req.params.id);
+  const idx = db.products.findIndex(p => p.id === id);
+  if (idx !== -1) {
+    const { isFlashDeal, discountPercent } = req.body;
+    const prod = db.products[idx];
+
+    if (isFlashDeal) {
+      const pct = Number(discountPercent) || 20;
+      const currentPrice = Number(prod.price) || 100;
+      const originalPrice = prod.originalPrice || currentPrice;
+      const newPrice = Number((originalPrice * (1 - pct / 100)).toFixed(2));
+
+      prod.discount = `${pct}% Off`;
+      prod.originalPrice = originalPrice;
+      prod.price = newPrice;
+      prod.tag = { type: 'discount', label: `-${pct}%`, text: 'Flash Deal' };
+    } else {
+      prod.discount = null;
+      if (prod.originalPrice) prod.price = prod.originalPrice;
+      prod.tag = null;
+    }
+
+    saveDb(db);
+    return res.json(prod);
+  }
+  res.status(404).json({ error: "Product not found" });
+});
+
 // Post review for product
 app.post('/api/products/:id/reviews', (req, res) => {
   const db = getDb();

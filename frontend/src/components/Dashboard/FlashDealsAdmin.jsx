@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
 import { Flame, Plus, CheckCircle, XCircle, Tag, Edit, Trash2, Percent } from 'lucide-react';
+import { API_BASE } from '../../config/api';
 
 export default function FlashDealsAdmin() {
   const [deals, setDeals] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [filteredDeals, setFilteredDeals] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -12,20 +14,21 @@ export default function FlashDealsAdmin() {
 
   const fetchDeals = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
-        const activeDeals = data.filter(p => {
+        const productList = Array.isArray(data) ? data : [];
+        setAllProducts(productList);
+
+        const activeDeals = productList.filter(p => {
           if (!p) return false;
           if (p.discount || (p.originalPrice && p.originalPrice > p.price)) return true;
           if (p.tag && (p.tag.type === 'discount' || String(p.tag.text).toLowerCase().includes('deal') || String(p.tag.label).toLowerCase().includes('deal'))) return true;
           return false;
         });
 
-        // Fallback to top products if deals list is small
-        const finalDeals = activeDeals.length > 0 ? activeDeals : data.slice(0, 6);
-        setDeals(finalDeals);
-        filterByTab(finalDeals, activeTab);
+        setDeals(activeDeals);
+        filterByTab(activeDeals, activeTab);
         setLoading(false);
       })
       .catch(err => {
@@ -47,20 +50,32 @@ export default function FlashDealsAdmin() {
     }
   };
 
+  const handleToggleFlashDeal = async (productId, currentIsDeal) => {
+    try {
+      await fetch(`${API_BASE}/api/products/${productId}/flash-deal`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isFlashDeal: !currentIsDeal, discountPercent: 25 })
+      });
+      fetchDeals();
+    } catch (err) {
+      console.error("Failed to toggle flash deal status", err);
+    }
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to end this flash deal?")) {
       try {
-        await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE' });
-        fetchDeals();
+        await handleToggleFlashDeal(id, true);
       } catch (err) {
-        console.error("Failed to delete deal:", err);
+        console.error("Failed to end deal:", err);
       }
     }
   };
 
   const handleToggleStock = async (id, currentStock) => {
     try {
-      await fetch(`http://localhost:5000/api/products/${id}/toggle-stock`, {
+      await fetch(`${API_BASE}/api/products/${id}/toggle-stock`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inStock: !currentStock })
@@ -75,18 +90,19 @@ export default function FlashDealsAdmin() {
     try {
       const payload = {
         ...formData,
-        discount: formData.discount || "20% Off",
-        tag: { text: "Flash Deal", type: "discount", label: "-20%" }
+        discount: formData.discount || "25% Off",
+        originalPrice: formData.originalPrice || (formData.price ? Number(formData.price) * 1.25 : null),
+        tag: { text: "Flash Deal", type: "discount", label: "-25%" }
       };
 
       if (editingProduct) {
-        await fetch(`http://localhost:5000/api/products/${editingProduct.id}`, {
+        await fetch(`${API_BASE}/api/products/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
       } else {
-        await fetch(`http://localhost:5000/api/products`, {
+        await fetch(`${API_BASE}/api/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -115,7 +131,7 @@ export default function FlashDealsAdmin() {
             🔥 Flash Deals Management
           </h2>
           <p style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>
-            Monitor discount campaigns, price cuts, stock claims, and promotional pricing.
+            Both sides linked! Edit promotions here to update the customer storefront in real-time.
           </p>
         </div>
         <button 
@@ -205,8 +221,8 @@ export default function FlashDealsAdmin() {
                   </tr>
                 ) : (
                   filteredDeals.map((deal) => {
-                    const discountBadge = deal.discount || (deal.tag?.label || deal.tag?.text || '15% Off');
-                    const origPrice = deal.originalPrice || (deal.price ? deal.price * 1.2 : 0);
+                    const discountBadge = deal.discount || (deal.tag?.label || deal.tag?.text || '25% Off');
+                    const origPrice = deal.originalPrice || (deal.price ? deal.price * 1.25 : 0);
 
                     return (
                       <tr key={deal.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
@@ -218,7 +234,7 @@ export default function FlashDealsAdmin() {
                                 {deal.name}
                               </div>
                               <span style={{ fontSize: '10px', background: '#fee2e2', color: '#dc2626', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>
-                                FLASH DEAL
+                                🔥 FLASH DEAL
                               </span>
                             </div>
                           </div>
@@ -289,7 +305,7 @@ export default function FlashDealsAdmin() {
         onClose={() => setIsModalOpen(false)} 
         onSave={handleSave} 
         product={editingProduct} 
-        initialTag={{ type: 'discount', label: '-20%', text: 'Flash Deal' }}
+        initialTag={{ type: 'discount', label: '-25%', text: 'Flash Deal' }}
       />
     </div>
   );
