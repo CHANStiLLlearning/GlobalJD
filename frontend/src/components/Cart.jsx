@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trash2, ShoppingBag } from 'lucide-react';
 
-export default function Cart({ currentUser, cartItems, clearCart }) {
+export default function Cart({ currentUser, cartItems, updateQuantity, removeFromCart, clearCart }) {
   const navigate = useNavigate();
   const [checkingOut, setCheckingOut] = useState(false);
 
   // Calculate total
-  const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const total = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+  const cartItemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   const handleCheckout = async () => {
     if (!currentUser) {
@@ -49,8 +50,8 @@ export default function Cart({ currentUser, cartItems, clearCart }) {
           
           {/* Cart Items List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {cartItems.map((item, index) => (
-              <div key={index} style={{ 
+            {cartItems.map((item) => (
+              <div key={item.id} style={{ 
                 background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', 
                 padding: '16px', display: 'flex', gap: '16px', alignItems: 'center'
               }}>
@@ -59,6 +60,28 @@ export default function Cart({ currentUser, cartItems, clearCart }) {
                   <h4 style={{ margin: '0 0 4px 0', color: '#333' }}>{item.name}</h4>
                   <div style={{ color: '#e1251b', fontWeight: 'bold', fontSize: '18px' }}>${item.price.toFixed(2)}</div>
                 </div>
+                
+                {/* Quantity Controls */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#f8fafc', padding: '4px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                  <button 
+                    onClick={() => updateQuantity(item.id, -1)}
+                    disabled={(item.quantity || 1) <= 1}
+                    style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '4px 8px', fontSize: '16px', color: '#475569', opacity: (item.quantity || 1) <= 1 ? 0.3 : 1 }}
+                  >-</button>
+                  <span style={{ fontWeight: '600', fontSize: '14px', width: '20px', textAlign: 'center' }}>{item.quantity || 1}</span>
+                  <button 
+                    onClick={() => updateQuantity(item.id, 1)}
+                    style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '4px 8px', fontSize: '16px', color: '#475569' }}
+                  >+</button>
+                </div>
+
+                <button 
+                  onClick={() => removeFromCart(item.id)}
+                  style={{ border: 'none', background: '#fee2e2', color: '#ef4444', padding: '8px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title="Remove Item"
+                >
+                  <Trash2 size={18} />
+                </button>
               </div>
             ))}
           </div>
@@ -72,7 +95,7 @@ export default function Cart({ currentUser, cartItems, clearCart }) {
               <h3 style={{ margin: '0 0 16px 0', paddingBottom: '16px', borderBottom: '1px solid #eaeaea' }}>Order Summary</h3>
               
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', color: '#666' }}>
-                <span>Subtotal ({cartItems.length} items)</span>
+                <span>Subtotal ({cartItemCount} items)</span>
                 <span>${total.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', color: '#666' }}>

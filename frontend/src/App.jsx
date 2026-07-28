@@ -18,10 +18,10 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'r
 import Login from './components/Login';
 
 
-function Layout({ children, cartItems, cartBounce, currentUser, setCurrentUser }) {
+function Layout({ children, cartItems, cartItemCount, cartBounce, currentUser, setCurrentUser }) {
   return (
     <>
-      <Header cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Header cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser} />
       {children}
       <Footer />
     </>
@@ -69,16 +69,37 @@ function AppRoutes() {
       return;
     }
     
-    setCartItems(prev => [...prev, product]);
+    setCartItems(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
     setCartBounce(true);
     setTimeout(() => {
       setCartBounce(false);
-    }, 200);
+    }, 300);
   };
 
-  const clearCart = () => {
-    setCartItems([]);
+  const updateQuantity = (id, delta) => {
+    setCartItems(prev => prev.map(item => {
+      if (item.id === id) {
+        const newQuantity = Math.max(1, item.quantity + delta);
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    }));
   };
+
+  const removeFromCart = (id) => {
+    setCartItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const clearCart = () => setCartItems([]);
+
+  // Calculate total items (sum of quantities)
+  const cartItemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
     <Routes>
@@ -88,7 +109,7 @@ function AppRoutes() {
       <Route 
         path="/" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <Hero />
 
             <ProductGrid onAddToCart={handleAddToCart} />
@@ -100,7 +121,7 @@ function AppRoutes() {
       <Route 
         path="/product/:id" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <ProductDetail onAddToCart={handleAddToCart} currentUser={currentUser} />
           </Layout>
         } 
@@ -110,7 +131,7 @@ function AppRoutes() {
       <Route 
         path="/flash-deals" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <FlashDeals onAddToCart={handleAddToCart} />
           </Layout>
         } 
@@ -120,7 +141,7 @@ function AppRoutes() {
       <Route 
         path="/new-arrivals" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <NewArrivals onAddToCart={handleAddToCart} />
           </Layout>
         } 
@@ -130,7 +151,7 @@ function AppRoutes() {
       <Route 
         path="/electronics" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <Electronics onAddToCart={handleAddToCart} />
           </Layout>
         } 
@@ -140,7 +161,7 @@ function AppRoutes() {
       <Route 
         path="/fashion" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <Fashion onAddToCart={handleAddToCart} />
           </Layout>
         } 
@@ -150,7 +171,7 @@ function AppRoutes() {
       <Route 
         path="/global-brands" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <GlobalBrands onAddToCart={handleAddToCart} />
           </Layout>
         } 
@@ -166,7 +187,7 @@ function AppRoutes() {
       <Route 
         path="/my-orders" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <MyOrders currentUser={currentUser} />
           </Layout>
         } 
@@ -176,8 +197,8 @@ function AppRoutes() {
       <Route 
         path="/cart" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
-            <Cart currentUser={currentUser} cartItems={cartItems} clearCart={clearCart} />
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+            <Cart currentUser={currentUser} cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} clearCart={clearCart} />
           </Layout>
         } 
       />
@@ -186,7 +207,7 @@ function AppRoutes() {
       <Route 
         path="/checkout" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <Checkout currentUser={currentUser} clearCart={clearCart} />
           </Layout>
         } 
@@ -196,7 +217,7 @@ function AppRoutes() {
       <Route 
         path="*" 
         element={
-          <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
+          <Layout cartItems={cartItems} cartItemCount={cartItemCount} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <div className="container" style={{ padding: '100px 20px', textAlign: 'center', minHeight: '60vh' }}>
               <h2>404 - Page Not Found</h2>
               <p style={{ marginTop: '16px', color: '#666' }}>The page you are looking for does not exist.</p>

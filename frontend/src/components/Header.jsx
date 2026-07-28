@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { API_BASE } from '../config/api';
 
-const Header = ({ cartItems, cartBounce, currentUser, setCurrentUser }) => {
+const Header = ({ cartItems, cartItemCount, cartBounce, currentUser, setCurrentUser }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -130,7 +130,7 @@ const Header = ({ cartItems, cartBounce, currentUser, setCurrentUser }) => {
               }}>
                   <i className="fas fa-shopping-cart"></i>
                   <span>Cart</span>
-                  <span className="cart-count">{cartItems ? cartItems.length : 0}</span>
+                  <span className="cart-count">{cartItemCount || 0}</span>
               </Link>
           </div>
       </header>

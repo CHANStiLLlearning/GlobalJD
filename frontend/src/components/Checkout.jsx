@@ -7,6 +7,7 @@ export default function Checkout({ currentUser, clearCart }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [processing, setProcessing] = useState(false);
+  const [processingText, setProcessingText] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('khqr');
 
@@ -23,45 +24,53 @@ export default function Checkout({ currentUser, clearCart }) {
     );
   }
 
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+  const subtotal = items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+  const cartItemCount = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const tax = subtotal * 0.05; // 5% tax
+  const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
+  const total = subtotal + tax + shipping;
 
   const handlePayment = (e) => {
     e.preventDefault();
     if (!currentUser) return;
     
     setProcessing(true);
+    setProcessingText(paymentMethod === 'khqr' ? 'Verifying KHQR transfer...' : 'Contacting your bank...');
 
-    // Simulate payment gateway delay
+    // Simulate payment gateway verification delay
     setTimeout(async () => {
+      setProcessingText('Creating your order...');
       try {
-        for (const item of items) {
-          const orderPayload = {
-            customer: currentUser.username,
-            product: item.name,
-            amount: `$${item.price.toFixed(2)}`,
-            status: 'Processing'
-          };
-          
-          console.log('[FRONTEND CHECKOUT]: Placing order...', orderPayload);
+        // Group items into a single order summary string
+        const productSummary = items.map(item => `${item.quantity || 1}x ${item.name}`).join(', ');
 
-          const res = await fetch(`${API_BASE}/api/orders`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderPayload)
-          });
-          
-          const responseData = await res.json();
-          console.log('[FRONTEND CHECKOUT]: API Response:', responseData);
+        const orderPayload = {
+          customer: currentUser.username,
+          product: productSummary,
+          amount: `$${total.toFixed(2)}`,
+          status: 'Processing'
+        };
+        
+        console.log('[FRONTEND CHECKOUT]: Placing combined order...', orderPayload);
 
-          if (!res.ok) {
-            throw new Error(responseData.error || 'Failed to record order');
-          }
+        const res = await fetch(`${API_BASE}/api/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+        
+        const responseData = await res.json();
+        console.log('[FRONTEND CHECKOUT]: API Response:', responseData);
+
+        if (!res.ok) {
+          throw new Error(responseData.error || 'Failed to record order');
         }
         
         if (fromCart && clearCart) {
           clearCart();
         }
         
+        setProcessingText('');
         setProcessing(false);
         setPaymentSuccess(true);
         
@@ -73,9 +82,10 @@ export default function Checkout({ currentUser, clearCart }) {
       } catch (err) {
         console.error("[FRONTEND CHECKOUT ERROR]: Checkout failed:", err);
         alert(`Payment failed: ${err.message || 'Please try again.'}`);
+        setProcessingText('');
         setProcessing(false);
       }
-    }, 2000);
+    }, 2500);
   };
 
   if (paymentSuccess) {
@@ -208,7 +218,7 @@ export default function Checkout({ currentUser, clearCart }) {
                 }}
               >
                 {processing ? (
-                  <>Processing...</>
+                  <>{processingText}</>
                 ) : paymentMethod === 'khqr' ? (
                   <><ShieldCheck size={20} /> I have paid ${total.toFixed(2)} via KHQR</>
                 ) : (
@@ -230,22 +240,31 @@ export default function Checkout({ currentUser, clearCart }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px', maxHeight: '300px', overflowY: 'auto' }}>
               {items.map((item, index) => (
                 <div key={index} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <img src={item.image} alt={item.name} style={{ width: '50px', height: '50px', objectFit: 'contain', background: '#f9f9f9', borderRadius: '4px' }} />
+                  <div style={{ position: 'relative' }}>
+                    <img src={item.image} alt={item.name} style={{ width: '50px', height: '50px', objectFit: 'contain', background: '#f9f9f9', borderRadius: '4px' }} />
+                    <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#64748b', color: '#fff', fontSize: '10px', fontWeight: 'bold', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+                      {item.quantity || 1}
+                    </span>
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4 style={{ margin: '0 0 4px 0', color: '#333', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</h4>
-                    <div style={{ color: '#e1251b', fontWeight: 'bold', fontSize: '14px' }}>${item.price.toFixed(2)}</div>
+                    <div style={{ color: '#e1251b', fontWeight: 'bold', fontSize: '14px' }}>${(item.price * (item.quantity || 1)).toFixed(2)}</div>
                   </div>
                 </div>
               ))}
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', color: '#666' }}>
-              <span>Subtotal ({items.length} items)</span>
-              <span>${total.toFixed(2)}</span>
+              <span>Subtotal ({cartItemCount} items)</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', color: '#666' }}>
+              <span>Tax (5%)</span>
+              <span>${tax.toFixed(2)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', color: '#666' }}>
               <span>Shipping</span>
-              <span style={{ color: '#10b981' }}>Free</span>
+              <span style={{ color: shipping === 0 ? '#10b981' : '#666' }}>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
             </div>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #eaeaea', fontSize: '20px', fontWeight: 'bold' }}>
