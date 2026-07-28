@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Cpu, Star, Laptop, Smartphone, Headphones, Camera, Watch, Zap } from 'lucide-react';
 import { API_BASE } from '../config/api';
+import { FALLBACK_PRODUCTS } from '../config/fallbackProducts';
 
 const Electronics = ({ onAddToCart }) => {
   const [products, setProducts] = useState([]);
@@ -15,8 +16,8 @@ const Electronics = ({ onAddToCart }) => {
     fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
-        // Filter all electronics (audio, wearables, computers, photography, smartphones, electronics)
-        const electronicsItems = data.filter(p => {
+        const rawItems = (Array.isArray(data) && data.length > 0) ? data : FALLBACK_PRODUCTS;
+        const electronicsItems = rawItems.filter(p => {
           const cat = (p.category || '').toLowerCase();
           return cat.includes('electronics') || cat.includes('audio') || cat.includes('wearable') || 
                  cat.includes('computer') || cat.includes('photo') || cat.includes('smartphone');
@@ -27,6 +28,9 @@ const Electronics = ({ onAddToCart }) => {
       })
       .catch(err => {
         console.error("Failed to fetch electronics products:", err);
+        const electronicsItems = FALLBACK_PRODUCTS.filter(p => (p.category || '').toLowerCase().includes('electronics'));
+        setProducts(electronicsItems);
+        setFilteredProducts(electronicsItems);
         setLoading(false);
       });
   }, []);

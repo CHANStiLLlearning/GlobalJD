@@ -4,23 +4,88 @@
       "id": 1785209533514,
       "name": "Coach Gallery Tote Bag in Crossgrain Leather",
       "brand": "Apple",
+      "category": "electronics",
       "sku": "CCH-GAL-TOTE-BLK",
       "price": 9999,
       "originalPrice": 99999,
-      "category": "electronics",
+      "discount": "20% Off",
+      "stockStatus": "In Stock (120 Units)",
+      "stockCount": 120,
+      "inStock": true,
+      "colors": [
+        "Black",
+        "Silver",
+        "Midnight Blue"
+      ],
+      "sizes": [
+        "One Size"
+      ],
       "weight": "187 g",
+      "features": [
+        "Industry-leading Noise Cancellation with dual processors",
+        "Bluetooth 5.3 multi-point connectivity",
+        "30-hour battery life with 3-min quick charging for 3 hours",
+        "Crystal clear hands-free calling with 4 beamforming microphones"
+      ],
+      "specifications": {
+        "Bluetooth Version": "5.3",
+        "Battery Life": "30 Hours",
+        "Charging": "USB-C Fast Charging",
+        "Driver Size": "30 mm",
+        "Frequency Response": "4Hz - 40,000Hz",
+        "Impedance": "48 Ohm"
+      },
+      "packageIncludes": [
+        "Sony Headphones",
+        "USB-C Charging Cable",
+        "3.5mm Audio Cable",
+        "Carrying Case",
+        "User Manual"
+      ],
+      "benefits": [
+        "Unmatched comfort for long flights and work sessions",
+        "Immersive audiophile-grade high-res audio playback",
+        "Smart touch controls and wear detection",
+        "Ultra-lightweight ergonomic headband design"
+      ],
       "warranty": "1-Year Brand Warranty",
-      "description": "https://globaljd-backend.onrender.com",
+      "rating": "5.0 (1 review)",
+      "ratingValue": 5,
+      "customerReviews": [
+        {
+          "id": 101,
+          "username": "John Doe",
+          "rating": 5,
+          "date": "2026-07-20",
+          "comment": "Amazing sound quality and very comfortable! The active noise cancellation cuts out plane engine noise completely."
+        },
+        {
+          "id": 102,
+          "username": "Alice Smith",
+          "rating": 5,
+          "date": "2026-07-18",
+          "comment": "Battery lasts all week with daily commute usage. Very happy with this purchase."
+        },
+        {
+          "id": 103,
+          "username": "Marcus Vance",
+          "rating": 4,
+          "date": "2026-07-10",
+          "comment": "Sleek look and superb sound. Carrying case is top quality as well."
+        }
+      ],
+      "shippingInfo": "Free Express Shipping. Delivery in 3–5 Business Days.",
+      "returnPolicy": "30-Day Free Returns & Easy Exchanges",
       "image": "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png",
+      "images": [
+        "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png"
+      ],
+      "description": "https://globaljd-backend.onrender.com",
       "tag": {
         "text": "Flash Deal",
         "type": "discount",
         "label": "-20%"
-      },
-      "inStock": true,
-      "discount": "20% Off",
-      "rating": "5.0 (1 review)",
-      "ratingValue": 5
+      }
     },
     {
       "id": 1785205347646,
@@ -383,69 +448,6 @@
         "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80"
       ],
       "description": "Crafted from premium full-grain leather, this backpack offers refined elegance, modern organization, and long-lasting durability for daily travel."
-    },
-    {
-      "id": 6,
-      "name": "Designer Polarized Sunglasses",
-      "brand": "Ray-Ban",
-      "category": "Fashion > Eyewear",
-      "sku": "RAY-WAY-POL-GLD",
-      "price": 150,
-      "originalPrice": 200,
-      "discount": "25% Off",
-      "stockStatus": "In Stock (95 Units)",
-      "stockCount": 95,
-      "inStock": true,
-      "colors": [
-        "Gold / G-15 Green",
-        "Black / Dark Gray",
-        "Tortoise Shell"
-      ],
-      "sizes": [
-        "52mm Medium"
-      ],
-      "weight": "38 g",
-      "features": [
-        "100% UV400 Protection polarized glass lenses",
-        "Lightweight durable acetate and metal alloy frame"
-      ],
-      "specifications": {
-        "Lens Material": "Polarized Crystal Glass",
-        "UV Protection": "100% UV400",
-        "Lens Width": "52 mm"
-      },
-      "packageIncludes": [
-        "Designer Sunglasses",
-        "Leather Protective Case",
-        "Microfiber Cleaning Cloth"
-      ],
-      "benefits": [
-        "Enhances visual contrast and reduces eye fatigue",
-        "Scratch-resistant crystal glass optical clarity"
-      ],
-      "warranty": "2-Year Manufacturer Warranty",
-      "rating": "4.8 (640 reviews)",
-      "ratingValue": 4.8,
-      "customerReviews": [
-        {
-          "id": 601,
-          "username": "Hannah W.",
-          "rating": 5,
-          "date": "2026-07-23",
-          "comment": "Classic style! Polarized lenses make driving during sunny afternoons so comfortable."
-        }
-      ],
-      "shippingInfo": "Free Shipping. Delivery in 3–5 Business Days.",
-      "returnPolicy": "30-Day Free Returns",
-      "tag": {
-        "text": "Global",
-        "type": "global"
-      },
-      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
-      "images": [
-        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80"
-      ],
-      "description": "Elevate your style with iconic polarized sunglasses featuring 100% UV protection and crystal clear optical glass lenses."
     }
   ],
   "orders": [

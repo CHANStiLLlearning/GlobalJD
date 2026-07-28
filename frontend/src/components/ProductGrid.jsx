@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE } from '../config/api';
+import { FALLBACK_PRODUCTS } from '../config/fallbackProducts';
 
 const ProductGrid = ({ onAddToCart }) => {
   const [products, setProducts] = useState([]);
@@ -11,11 +12,16 @@ const ProductGrid = ({ onAddToCart }) => {
     fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
-        setProducts(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+        } else {
+          setProducts(FALLBACK_PRODUCTS);
+        }
         setLoading(false);
       })
       .catch(err => {
-        console.error("Failed to fetch products:", err);
+        console.error("Failed to fetch products, using fallback:", err);
+        setProducts(FALLBACK_PRODUCTS);
         setLoading(false);
       });
   }, []);

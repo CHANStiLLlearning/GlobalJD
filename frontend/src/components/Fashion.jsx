@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, Star, Sparkles, Filter, ShieldCheck, Heart } from 'lucide-react';
 import { API_BASE } from '../config/api';
+import { FALLBACK_PRODUCTS } from '../config/fallbackProducts';
 
 const Fashion = ({ onAddToCart }) => {
   const [products, setProducts] = useState([]);
@@ -15,8 +16,8 @@ const Fashion = ({ onAddToCart }) => {
     fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
-        // Filter fashion items (clothing, jewelry, fashion, apparel, bags, eyewear, footwear)
-        const fashionItems = data.filter(p => {
+        const rawItems = (Array.isArray(data) && data.length > 0) ? data : FALLBACK_PRODUCTS;
+        const fashionItems = rawItems.filter(p => {
           const cat = (p.category || '').toLowerCase();
           return cat.includes('fashion') || cat.includes('clothing') || cat.includes('apparel') || 
                  cat.includes('jewelery') || cat.includes('bags') || cat.includes('eyewear') || cat.includes('footwear');
@@ -27,6 +28,9 @@ const Fashion = ({ onAddToCart }) => {
       })
       .catch(err => {
         console.error("Failed to fetch fashion products:", err);
+        const fashionItems = FALLBACK_PRODUCTS.filter(p => (p.category || '').toLowerCase().includes('fashion'));
+        setProducts(fashionItems);
+        setFilteredProducts(fashionItems);
         setLoading(false);
       });
   }, []);
