@@ -16,7 +16,7 @@ import Checkout from './components/Checkout';
 
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Login from './components/Login';
-import CategoryShowcase from './components/CategoryShowcase';
+
 
 function Layout({ children, cartItems, cartBounce, currentUser, setCurrentUser }) {
   return (
@@ -90,7 +90,7 @@ function AppRoutes() {
         element={
           <Layout cartItems={cartItems} cartBounce={cartBounce} currentUser={currentUser} setCurrentUser={setCurrentUser}>
             <Hero />
-            <CategoryShowcase />
+
             <ProductGrid onAddToCart={handleAddToCart} />
           </Layout>
         } 
