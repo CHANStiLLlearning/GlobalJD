@@ -591,6 +591,11 @@
       "username": "chan@gmail.com",
       "password": "1234",
       "role": "user"
+    },
+    {
+      "username": "real_user_supa",
+      "password": "mysecretpassword",
+      "role": "user"
     }
   ],
   "wishlists": [],
