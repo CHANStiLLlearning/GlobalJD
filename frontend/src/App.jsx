@@ -70,11 +70,14 @@ function AppRoutes() {
     }
     
     setCartItems(prev => {
-      const existing = prev.find(item => item.id === product.id);
+      // Use id if available, fallback to name for mock products
+      const identifier = product.id || product.name;
+      const existing = prev.find(item => (item.id || item.name) === identifier);
+      
       if (existing) {
-        return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
+        return prev.map(item => (item.id || item.name) === identifier ? { ...item, quantity: (item.quantity || 1) + 1 } : item);
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { ...product, quantity: 1, _cartId: identifier }];
     });
     setCartBounce(true);
     setTimeout(() => {
@@ -82,18 +85,18 @@ function AppRoutes() {
     }, 300);
   };
 
-  const updateQuantity = (id, delta) => {
+  const updateQuantity = (identifier, delta) => {
     setCartItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQuantity = Math.max(1, item.quantity + delta);
+      if ((item.id || item.name) === identifier) {
+        const newQuantity = Math.max(1, (item.quantity || 1) + delta);
         return { ...item, quantity: newQuantity };
       }
       return item;
     }));
   };
 
-  const removeFromCart = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+  const removeFromCart = (identifier) => {
+    setCartItems(prev => prev.filter(item => (item.id || item.name) !== identifier));
   };
 
   const clearCart = () => setCartItems([]);

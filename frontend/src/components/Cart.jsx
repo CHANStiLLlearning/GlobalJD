@@ -50,8 +50,10 @@ export default function Cart({ currentUser, cartItems, updateQuantity, removeFro
           
           {/* Cart Items List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {cartItems.map((item) => (
-              <div key={item.id} style={{ 
+            {cartItems.map((item) => {
+              const identifier = item.id || item.name;
+              return (
+              <div key={identifier} style={{ 
                 background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', 
                 padding: '16px', display: 'flex', gap: '16px', alignItems: 'center'
               }}>
@@ -64,26 +66,26 @@ export default function Cart({ currentUser, cartItems, updateQuantity, removeFro
                 {/* Quantity Controls */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#f8fafc', padding: '4px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
                   <button 
-                    onClick={() => updateQuantity(item.id, -1)}
+                    onClick={() => updateQuantity(identifier, -1)}
                     disabled={(item.quantity || 1) <= 1}
                     style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '4px 8px', fontSize: '16px', color: '#475569', opacity: (item.quantity || 1) <= 1 ? 0.3 : 1 }}
                   >-</button>
                   <span style={{ fontWeight: '600', fontSize: '14px', width: '20px', textAlign: 'center' }}>{item.quantity || 1}</span>
                   <button 
-                    onClick={() => updateQuantity(item.id, 1)}
+                    onClick={() => updateQuantity(identifier, 1)}
                     style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '4px 8px', fontSize: '16px', color: '#475569' }}
                   >+</button>
                 </div>
 
                 <button 
-                  onClick={() => removeFromCart(item.id)}
-                  style={{ border: 'none', background: '#fee2e2', color: '#ef4444', padding: '8px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  onClick={() => removeFromCart(identifier)}
+                  style={{ border: 'none', background: '#fee2e2', color: '#ef4444', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: '500' }}
                   title="Remove Item"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={16} /> Remove
                 </button>
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Order Summary */}
@@ -118,6 +120,17 @@ export default function Cart({ currentUser, cartItems, updateQuantity, removeFro
                 }}
               >
                 {checkingOut ? 'Processing...' : 'Proceed to Checkout'}
+              </button>
+
+              <button 
+                onClick={clearCart}
+                style={{ 
+                  width: '100%', padding: '12px', background: 'transparent', color: '#64748b', 
+                  border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '14px', fontWeight: '500',
+                  marginTop: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                }}
+              >
+                <Trash2 size={16} /> Empty Cart
               </button>
             </div>
           </div>
