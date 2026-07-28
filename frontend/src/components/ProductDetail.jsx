@@ -183,6 +183,105 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
   }
 
   return (
+    <>
+    <style>{`
+      /* ===== Product Detail Page — Mobile Responsive ===== */
+      @media (max-width: 768px) {
+        .pdp-card {
+          grid-template-columns: 1fr !important;
+          gap: 24px !important;
+          padding: 20px !important;
+        }
+        .pdp-main-image-container {
+          height: 300px !important;
+        }
+        .pdp-title {
+          font-size: 20px !important;
+        }
+        .pdp-price-main {
+          font-size: 28px !important;
+        }
+        .pdp-guarantees-grid {
+          grid-template-columns: repeat(3, 1fr) !important;
+          gap: 8px !important;
+          padding: 14px 12px !important;
+        }
+        .pdp-features-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .pdp-benefits-grid {
+          grid-template-columns: repeat(2, 1fr) !important;
+        }
+        .pdp-package-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .pdp-shipping-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .pdp-cta-row {
+          flex-direction: column !important;
+          gap: 12px !important;
+        }
+        .pdp-tabs-container {
+          padding: 20px !important;
+        }
+        .pdp-breadcrumbs {
+          font-size: 12px !important;
+          flex-wrap: wrap !important;
+        }
+        .pdp-breadcrumbs span:last-child {
+          max-width: 180px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .pdp-thumbnails {
+          flex-wrap: wrap !important;
+        }
+        .pdp-price-box {
+          flex-wrap: wrap !important;
+          gap: 8px !important;
+        }
+        .pdp-tab-bar {
+          gap: 4px !important;
+        }
+        .pdp-tab-bar button {
+          font-size: 13px !important;
+          padding: 10px 12px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .pdp-card {
+          padding: 14px !important;
+        }
+        .pdp-main-image-container {
+          height: 240px !important;
+        }
+        .pdp-title {
+          font-size: 18px !important;
+        }
+        .pdp-price-main {
+          font-size: 24px !important;
+        }
+        .pdp-guarantees-grid span {
+          font-size: 10px !important;
+        }
+        .pdp-benefits-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .pdp-tabs-container {
+          padding: 14px !important;
+        }
+        .pdp-tab-bar button {
+          font-size: 11px !important;
+          padding: 8px 8px !important;
+          gap: 4px !important;
+        }
+        .pdp-tab-bar button svg {
+          display: none;
+        }
+      }
+    `}</style>
     <div className="product-page-wrapper" style={{ background: '#f5f7fa', paddingBottom: '60px' }}>
       <div className="container">
         {/* Breadcrumbs Navigation */}
@@ -240,7 +339,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
             )}
 
             {/* Guarantees Ribbon */}
-            <div style={{ marginTop: '28px', background: '#f8fafc', padding: '18px 24px', borderRadius: '12px', border: '1px solid #f1f5f9', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', textAlign: 'center' }}>
+            <div className="pdp-guarantees-grid" style={{ marginTop: '28px', background: '#f8fafc', padding: '18px 24px', borderRadius: '12px', border: '1px solid #f1f5f9', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', textAlign: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                 <Truck size={22} style={{ color: 'var(--jd-red)' }} />
                 <span style={{ fontSize: '12px', fontWeight: '600', color: '#334155' }}>Fast Shipping</span>
@@ -281,7 +380,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
             </div>
 
             {/* Title */}
-            <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', lineHeight: '1.25', marginBottom: '12px' }}>
+            <h1 className="pdp-title" style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', lineHeight: '1.25', marginBottom: '12px' }}>
               {product.name}
             </h1>
 
@@ -297,10 +396,10 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
             </div>
 
             {/* Price Box */}
-            <div style={{ background: '#fff5f5', border: '1px dashed #fecaca', padding: '20px', borderRadius: '12px', marginBottom: '24px', display: 'flex', alignItems: 'baseline', gap: '16px' }}>
+            <div className="pdp-price-box" style={{ background: '#fff5f5', border: '1px dashed #fecaca', padding: '20px', borderRadius: '12px', marginBottom: '24px', display: 'flex', alignItems: 'baseline', gap: '16px' }}>
               <div>
                 <span style={{ fontSize: '16px', color: 'var(--jd-red)', fontWeight: '700' }}>$</span>
-                <span style={{ fontSize: '38px', fontWeight: '800', color: 'var(--jd-red)', lineHeight: '1' }}>
+                <span className="pdp-price-main" style={{ fontSize: '38px', fontWeight: '800', color: 'var(--jd-red)', lineHeight: '1' }}>
                   {product.price.toFixed(2)}
                 </span>
               </div>
@@ -389,7 +488,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
             </div>
 
             {/* CTA Buttons */}
-            <div style={{ display: 'flex', gap: '16px', marginTop: 'auto' }}>
+            <div className="pdp-cta-row" style={{ display: 'flex', gap: '16px', marginTop: 'auto' }}>
               <button
                 onClick={handleAddToCartWithQty}
                 disabled={!product.inStock}
@@ -423,7 +522,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
         <div className="pdp-tabs-container" style={{ background: '#ffffff', borderRadius: '16px', boxShadow: '0 8px 30px rgba(0,0,0,0.06)', padding: '36px', overflow: 'hidden' }}>
           
           {/* Tab Headers */}
-          <div style={{ display: 'flex', gap: '24px', borderBottom: '2px solid #f1f5f9', marginBottom: '32px', overflowX: 'auto' }}>
+          <div className="pdp-tab-bar" style={{ display: 'flex', gap: '24px', borderBottom: '2px solid #f1f5f9', marginBottom: '32px', overflowX: 'auto' }}>
             {[
               { id: 'overview', label: 'Overview & Features', icon: <Sparkles size={18} /> },
               { id: 'specs', label: 'Technical Specifications', icon: <Sliders size={18} /> },
@@ -458,7 +557,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
               <h4 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Check size={20} color="var(--jd-red)" /> Key Features & Highlights
               </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '32px' }}>
+              <div className="pdp-features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '32px' }}>
                 {product.features.map((feat, index) => (
                   <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: '#f8fafc', padding: '14px 18px', borderRadius: '10px', border: '1px solid #f1f5f9' }}>
                     <div style={{ background: '#fee2e2', color: 'var(--jd-red)', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
@@ -473,7 +572,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
               <h4 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Award size={20} color="var(--jd-red)" /> Customer Benefits
               </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+              <div className="pdp-benefits-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
                 {product.benefits.map((benefit, index) => (
                   <div key={index} style={{ background: '#eff6ff', padding: '18px', borderRadius: '12px', border: '1px solid #dbeafe', textAlign: 'center' }}>
                     <div style={{ color: '#2563eb', fontWeight: '700', fontSize: '14px', marginBottom: '4px' }}>Benefit #{index + 1}</div>
@@ -528,7 +627,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
               <h4 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Package size={20} color="var(--jd-red)" /> Package Includes (In the Box)
               </h4>
-              <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+              <ul className="pdp-package-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                 {product.packageIncludes.map((item, idx) => (
                   <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#f8fafc', padding: '12px 16px', borderRadius: '8px', border: '1px solid #f1f5f9', fontSize: '14px', color: '#334155', fontWeight: '500' }}>
                     <span style={{ color: 'var(--jd-red)' }}>•</span> {item}
@@ -637,7 +736,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
                 Shipping, Warranty & Return Policies
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+              <div className="pdp-shipping-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
                 <div style={{ background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   <Truck size={28} color="var(--jd-red)" style={{ marginBottom: '12px' }} />
                   <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>Shipping Information</h4>
@@ -662,6 +761,7 @@ const ProductDetail = ({ onAddToCart, currentUser }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
