@@ -8,8 +8,10 @@ export default function Login({ setCurrentUser }) {
   const [activeTab, setActiveTab] = useState('personal');
   const [loginMethod, setLoginMethod] = useState('password');
   const [isRegistering, setIsRegistering] = useState(false);
+  const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   
@@ -21,17 +23,31 @@ export default function Login({ setCurrentUser }) {
     setSuccessMsg('');
     
     if (!username || !password) {
-      setErrorMsg('Please enter both username and password.');
+      setErrorMsg('Please enter both email/username and password.');
       return;
     }
 
+    if (isRegistering) {
+      if (password.length < 4) {
+        setErrorMsg('Password must be at least 4 characters long.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setErrorMsg('Passwords do not match. Please verify.');
+        return;
+      }
+    }
+
     const endpoint = isRegistering ? `${API_BASE}/api/register` : `${API_BASE}/api/login`;
+    const payload = isRegistering 
+      ? { username: username.trim(), password, fullName: fullName.trim() } 
+      : { username: username.trim(), password };
     
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify(payload)
       });
       
       const data = await response.json();
@@ -40,11 +56,11 @@ export default function Login({ setCurrentUser }) {
         setErrorMsg(data.error || 'Authentication failed');
       } else {
         if (isRegistering) {
-          setSuccessMsg('Registration successful! Automatically logging you in...');
+          setSuccessMsg('Account registered successfully in real database! Logging you in...');
           setTimeout(() => {
             if (setCurrentUser) setCurrentUser(data.user);
             navigate('/');
-          }, 1500);
+          }, 1200);
         } else {
           if (setCurrentUser) setCurrentUser(data.user);
           navigate('/');
@@ -145,17 +161,29 @@ export default function Login({ setCurrentUser }) {
             </div>
 
             <form className="login-form" onSubmit={handleSubmit}>
-              <div className="input-group">
+              {isRegistering && (
+                <div className="input-group" style={{ marginBottom: '12px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="Full Name (Optional)" 
+                    className="login-input"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
+                </div>
+              )}
+              
+              <div className="input-group" style={{ marginBottom: '12px' }}>
                 <input 
                   type="text" 
-                  placeholder="Username / Phone / Email" 
+                  placeholder="Email / Phone / Username" 
                   className="login-input"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
               
-              <div className="input-group">
+              <div className="input-group" style={{ marginBottom: '12px' }}>
                 <input 
                   type="password" 
                   placeholder="Password" 
@@ -169,6 +197,18 @@ export default function Login({ setCurrentUser }) {
                   </button>
                 )}
               </div>
+
+              {isRegistering && (
+                <div className="input-group" style={{ marginBottom: '12px' }}>
+                  <input 
+                    type="password" 
+                    placeholder="Confirm Password" 
+                    className="login-input"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
+              )}
 
               {errorMsg && <div style={{ color: '#ef4444', fontSize: '13px', marginBottom: '12px' }}>{errorMsg}</div>}
               {successMsg && <div style={{ color: '#10b981', fontSize: '13px', marginBottom: '12px' }}>{successMsg}</div>}
