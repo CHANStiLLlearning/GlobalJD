@@ -80,7 +80,7 @@ const ProductGrid = ({ onAddToCart }) => {
         </div>
 
         {/* Products Grid */}
-        <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '24px' }}>
+        <div className="product-grid">
             {filteredProducts.map(product => (
               <Link 
                 to={`/product/${product.id}`} 

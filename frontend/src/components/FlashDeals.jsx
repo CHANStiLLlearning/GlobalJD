@@ -172,7 +172,7 @@ const FlashDeals = ({ onAddToCart }) => {
             <p style={{ color: '#94a3b8', fontSize: '14px' }}>Try selecting another filter pill above to view active deals.</p>
           </div>
         ) : (
-          <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '24px' }}>
+          <div className="product-grid">
             {filteredProducts.map(product => (
               <Link 
                 to={`/product/${product.id}`} 

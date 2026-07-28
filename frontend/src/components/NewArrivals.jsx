@@ -121,7 +121,7 @@ const NewArrivals = ({ onAddToCart }) => {
             <p style={{ color: '#94a3b8', fontSize: '14px' }}>Try switching filter tabs above to see all fresh releases.</p>
           </div>
         ) : (
-          <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '24px' }}>
+          <div className="product-grid">
             {filteredProducts.map(product => (
               <Link 
                 to={`/product/${product.id}`} 
