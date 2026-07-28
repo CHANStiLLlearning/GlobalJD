@@ -247,42 +247,55 @@ app.delete('/api/custom-items/:id', (req, res) => {
 // 3. ANALYTICS API (/api/analytics)
 // -------------------------------------------------------------
 app.get('/api/analytics', (req, res) => {
-  const db = getDb();
-  const totalProducts = db.products.length;
-  const inStockCount = db.products.filter(p => p.inStock !== false).length;
-  const outOfStockCount = db.products.filter(p => p.inStock === false).length;
-  const totalRevenue = db.orders.reduce((sum, o) => {
-    const num = parseFloat(String(o.amount).replace('$', '')) || 0;
-    return sum + num;
-  }, 0);
+  try {
+    const db = getDb();
+    const products = (db && Array.isArray(db.products)) ? db.products : [];
+    const orders = (db && Array.isArray(db.orders)) ? db.orders : [];
 
-  const categoryBreakdown = {};
-  db.products.forEach(p => {
-    const cat = p.category || 'other';
-    categoryBreakdown[cat] = (categoryBreakdown[cat] || 0) + 1;
-  });
+    const totalProducts = products.length;
+    const inStockCount = products.filter(p => p.inStock !== false).length;
+    const outOfStockCount = products.filter(p => p.inStock === false).length;
+    const totalRevenue = orders.reduce((sum, o) => {
+      const num = parseFloat(String(o.amount || '0').replace('$', '')) || 0;
+      return sum + num;
+    }, 0);
 
-  res.json({
-    totalProducts,
-    inStockCount,
-    outOfStockCount,
-    totalOrders: db.orders.length,
-    totalRevenue: `$${totalRevenue.toFixed(2)}`,
-    categoryBreakdown
-  });
+    const categoryBreakdown = {};
+    products.forEach(p => {
+      const cat = p.category || 'other';
+      categoryBreakdown[cat] = (categoryBreakdown[cat] || 0) + 1;
+    });
+
+    res.json({
+      totalProducts,
+      inStockCount,
+      outOfStockCount,
+      totalOrders: orders.length,
+      totalRevenue: `$${totalRevenue.toFixed(2)}`,
+      categoryBreakdown
+    });
+  } catch (err) {
+    console.error("Error in /api/analytics:", err);
+    res.status(500).json({ error: "Failed to fetch analytics", details: err.message });
+  }
 });
 
 // -------------------------------------------------------------
 // 4. ORDERS API
 // -------------------------------------------------------------
 app.get('/api/orders', (req, res) => {
-  const db = getDb();
-  const { username } = req.query;
-  if (username) {
-    const userOrders = db.orders.filter(o => o.customer === username);
-    return res.json(userOrders);
+  try {
+    const db = getDb();
+    const orders = (db && Array.isArray(db.orders)) ? db.orders : [];
+    const { username } = req.query;
+    if (username) {
+      return res.json(orders.filter(o => o.customer === username));
+    }
+    res.json(orders);
+  } catch (err) {
+    console.error("Error in GET /api/orders:", err);
+    res.status(500).json({ error: "Failed to fetch orders", details: err.message });
   }
-  res.json(db.orders);
 });
 
 app.post('/api/orders', (req, res) => {
