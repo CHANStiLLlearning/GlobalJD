@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 export default function CustomersAdmin() {
   const [customers, setCustomers] = useState([]);
@@ -6,7 +7,7 @@ export default function CustomersAdmin() {
 
   const fetchCustomers = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/users')
+    fetch(`${API_BASE}/api/users`)
       .then(res => res.json())
       .then(data => {
         setCustomers(data);
@@ -25,7 +26,7 @@ export default function CustomersAdmin() {
   const handleDelete = async (username) => {
     if (window.confirm(`Are you sure you want to permanently delete the account for ${username}?`)) {
       try {
-        await fetch(`http://localhost:5000/api/users/${username}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/users/${username}`, { method: 'DELETE' });
         fetchCustomers();
       } catch (err) {
         console.error("Failed to delete user", err);

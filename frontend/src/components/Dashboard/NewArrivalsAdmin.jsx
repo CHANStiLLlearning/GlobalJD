@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
 import { Sparkles, Plus, CheckCircle, XCircle, Tag, Edit, Trash2 } from 'lucide-react';
+import { API_BASE } from '../../config/api';
 
 export default function NewArrivalsAdmin() {
   const [items, setItems] = useState([]);
@@ -12,7 +13,7 @@ export default function NewArrivalsAdmin() {
 
   const fetchItems = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
         const newItems = data.filter(p => {
@@ -50,7 +51,7 @@ export default function NewArrivalsAdmin() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete/hide this new arrival product?")) {
       try {
-        await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/products/${id}`, { method: 'DELETE' });
         fetchItems();
       } catch (err) {
         console.error("Failed to delete product:", err);
@@ -60,7 +61,7 @@ export default function NewArrivalsAdmin() {
 
   const handleToggleStock = async (id, currentStock) => {
     try {
-      await fetch(`http://localhost:5000/api/products/${id}/toggle-stock`, {
+      await fetch(`${API_BASE}/api/products/${id}/toggle-stock`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inStock: !currentStock })
@@ -79,13 +80,13 @@ export default function NewArrivalsAdmin() {
       };
 
       if (editingProduct) {
-        await fetch(`http://localhost:5000/api/products/${editingProduct.id}`, {
+        await fetch(`${API_BASE}/api/products/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
       } else {
-        await fetch(`http://localhost:5000/api/products`, {
+        await fetch(`${API_BASE}/api/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

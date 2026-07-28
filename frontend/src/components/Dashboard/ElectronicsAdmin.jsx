@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
 import { Cpu, Laptop, Headphones, Camera, Watch, Smartphone, Plus, Edit, Trash2 } from 'lucide-react';
+import { API_BASE } from '../../config/api';
 
 export default function ElectronicsAdmin() {
   const [items, setItems] = useState([]);
@@ -12,7 +13,7 @@ export default function ElectronicsAdmin() {
 
   const fetchItems = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
         const electronicsItems = data.filter(p => {
@@ -46,7 +47,7 @@ export default function ElectronicsAdmin() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this electronic device?")) {
       try {
-        await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/products/${id}`, { method: 'DELETE' });
         fetchItems();
       } catch (err) {
         console.error("Failed to delete product:", err);
@@ -56,7 +57,7 @@ export default function ElectronicsAdmin() {
 
   const handleToggleStock = async (id, currentStock) => {
     try {
-      await fetch(`http://localhost:5000/api/products/${id}/toggle-stock`, {
+      await fetch(`${API_BASE}/api/products/${id}/toggle-stock`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inStock: !currentStock })
@@ -70,13 +71,13 @@ export default function ElectronicsAdmin() {
   const handleSave = async (formData) => {
     try {
       if (editingProduct) {
-        await fetch(`http://localhost:5000/api/products/${editingProduct.id}`, {
+        await fetch(`${API_BASE}/api/products/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
       } else {
-        await fetch(`http://localhost:5000/api/products`, {
+        await fetch(`${API_BASE}/api/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

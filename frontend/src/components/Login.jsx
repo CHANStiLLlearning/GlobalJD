@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { QrCode, MessageSquare, ChevronDown, MonitorSmartphone, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import { API_BASE } from '../config/api';
 
 export default function Login({ setCurrentUser }) {
   const [activeTab, setActiveTab] = useState('personal');
@@ -24,7 +25,7 @@ export default function Login({ setCurrentUser }) {
       return;
     }
 
-    const endpoint = isRegistering ? 'http://localhost:5000/api/register' : 'http://localhost:5000/api/login';
+    const endpoint = isRegistering ? `${API_BASE}/api/register` : `${API_BASE}/api/login`;
     
     try {
       const response = await fetch(endpoint, {

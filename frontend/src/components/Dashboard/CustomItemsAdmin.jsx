@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 export default function CustomItemsAdmin() {
   const [items, setItems] = useState([]);
@@ -8,7 +9,7 @@ export default function CustomItemsAdmin() {
 
   const fetchCustomItems = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/custom-items')
+    fetch(`${API_BASE}/api/custom-items`)
       .then(res => res.json())
       .then(data => {
         setItems(data);
@@ -29,7 +30,7 @@ export default function CustomItemsAdmin() {
     if (!title.trim()) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/custom-items', {
+      const res = await fetch(`${API_BASE}/api/custom-items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, category, status: 'Active' })
@@ -46,7 +47,7 @@ export default function CustomItemsAdmin() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this custom item?")) {
       try {
-        await fetch(`http://localhost:5000/api/custom-items/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/custom-items/${id}`, { method: 'DELETE' });
         fetchCustomItems();
       } catch (err) {
         console.error("Failed to delete custom item", err);

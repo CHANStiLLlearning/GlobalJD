@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config/api';
 
 const Header = ({ cartItems, cartBounce, currentUser, setCurrentUser }) => {
   const location = useLocation();
@@ -12,7 +13,7 @@ const Header = ({ cartItems, cartBounce, currentUser, setCurrentUser }) => {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => setAllProducts(data))
       .catch(err => console.error("Failed to fetch products for search", err));

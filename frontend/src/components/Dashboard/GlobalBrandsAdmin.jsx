@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
+import { API_BASE } from '../../config/api';
 
 export default function GlobalBrandsAdmin() {
   const [items, setItems] = useState([]);
@@ -9,11 +10,11 @@ export default function GlobalBrandsAdmin() {
 
   const fetchItems = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
-        const globalBrandsItems = data.filter(p => p.tag && p.tag.type === 'bestseller');
-        setItems(globalBrandsItems);
+        const brandItems = data.filter(p => p.tag && (p.tag.type === 'global' || p.brand));
+        setItems(brandItems);
         setLoading(false);
       })
       .catch(err => {
@@ -27,9 +28,9 @@ export default function GlobalBrandsAdmin() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to remove the best seller badge from this product?")) {
+    if (window.confirm("Are you sure you want to remove this brand item?")) {
       try {
-        await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/products/${id}`, { method: 'DELETE' });
         fetchItems();
       } catch (err) {
         console.error("Failed to delete", err);
@@ -40,13 +41,13 @@ export default function GlobalBrandsAdmin() {
   const handleSave = async (formData) => {
     try {
       if (editingProduct) {
-        await fetch(`http://localhost:5000/api/products/${editingProduct.id}`, {
+        await fetch(`${API_BASE}/api/products/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
       } else {
-        await fetch(`http://localhost:5000/api/products`, {
+        await fetch(`${API_BASE}/api/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)

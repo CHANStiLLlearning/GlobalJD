@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 export default function SettingsAdmin() {
   const [settings, setSettings] = useState({
@@ -12,7 +13,7 @@ export default function SettingsAdmin() {
   const [saveMessage, setSaveMessage] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/settings')
+    fetch(`${API_BASE}/api/settings`)
       .then(res => res.json())
       .then(data => {
         setSettings(data);
@@ -37,7 +38,7 @@ export default function SettingsAdmin() {
     setSaving(true);
     setSaveMessage('');
     
-    fetch('http://localhost:5000/api/settings', {
+    fetch(`${API_BASE}/api/settings`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings)

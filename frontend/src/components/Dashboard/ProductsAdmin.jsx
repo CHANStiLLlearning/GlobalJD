@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
+import { Package, Plus, Search, CheckCircle, XCircle, Trash2, Edit, Tag } from 'lucide-react';
+import { API_BASE } from '../../config/api';
 
 export default function ProductsAdmin() {
-  const [items, setItems] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const fetchItems = () => {
+  const fetchProducts = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => {
-        setItems(data);
+        setProducts(data);
+        setFilteredProducts(data);
         setLoading(false);
       })
       .catch(err => {
@@ -22,16 +28,16 @@ export default function ProductsAdmin() {
   };
 
   useEffect(() => {
-    fetchItems();
+    fetchProducts();
   }, []);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE' });
-        fetchItems();
+        await fetch(`${API_BASE}/api/products/${id}`, { method: 'DELETE' });
+        fetchProducts();
       } catch (err) {
-        console.error("Failed to delete", err);
+        console.error("Failed to delete product:", err);
       }
     }
   };
@@ -39,13 +45,13 @@ export default function ProductsAdmin() {
   const handleSave = async (formData) => {
     try {
       if (editingProduct) {
-        await fetch(`http://localhost:5000/api/products/${editingProduct.id}`, {
+        await fetch(`${API_BASE}/api/products/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
       } else {
-        await fetch(`http://localhost:5000/api/products`, {
+        await fetch(`${API_BASE}/api/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
@@ -53,20 +59,20 @@ export default function ProductsAdmin() {
       }
       setIsModalOpen(false);
       setEditingProduct(null);
-      fetchItems();
+      fetchProducts();
     } catch (err) {
-      console.error("Failed to save product", err);
+      console.error("Failed to save product:", err);
     }
   };
 
   const handleToggleStock = async (id, currentStock) => {
     try {
-      await fetch(`http://localhost:5000/api/products/${id}/toggle-stock`, {
+      await fetch(`${API_BASE}/api/products/${id}/toggle-stock`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inStock: !currentStock })
       });
-      setItems(prev => prev.map(p => p.id === id ? { ...p, inStock: !currentStock } : p));
+      fetchProducts();
     } catch (err) {
       console.error("Failed to toggle stock status", err);
     }
