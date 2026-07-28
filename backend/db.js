@@ -532,18 +532,18 @@ function readDb() {
     // Enrich products with default specification fields if missing
     if (data.products && Array.isArray(data.products)) {
       data.products = data.products.map(p => {
-        const defaultProd = defaultData.products.find(dp => dp.id === p.id) || defaultData.products[0];
+        const defaultProd = (defaultData.products && defaultData.products.find(dp => dp.id === p.id)) || (defaultData.products && defaultData.products[0]) || {};
         return {
           ...defaultProd,
           ...p,
-          colors: (p.colors && p.colors.length > 0) ? p.colors : defaultProd.colors,
-          sizes: (p.sizes && p.sizes.length > 0) ? p.sizes : defaultProd.sizes,
-          features: (p.features && p.features.length > 0) ? p.features : defaultProd.features,
-          specifications: (p.specifications && Object.keys(p.specifications).length > 0) ? p.specifications : defaultProd.specifications,
-          packageIncludes: (p.packageIncludes && p.packageIncludes.length > 0) ? p.packageIncludes : defaultProd.packageIncludes,
-          benefits: (p.benefits && p.benefits.length > 0) ? p.benefits : defaultProd.benefits,
-          customerReviews: (p.customerReviews && p.customerReviews.length > 0) ? p.customerReviews : defaultProd.customerReviews,
-          images: (p.images && p.images.length > 0) ? p.images : (p.image ? [p.image] : defaultProd.images)
+          colors: (p.colors && p.colors.length > 0) ? p.colors : (defaultProd.colors || ["Standard"]),
+          sizes: (p.sizes && p.sizes.length > 0) ? p.sizes : (defaultProd.sizes || ["Standard"]),
+          features: (p.features && p.features.length > 0) ? p.features : (defaultProd.features || []),
+          specifications: (p.specifications && Object.keys(p.specifications).length > 0) ? p.specifications : (defaultProd.specifications || {}),
+          packageIncludes: (p.packageIncludes && p.packageIncludes.length > 0) ? p.packageIncludes : (defaultProd.packageIncludes || []),
+          benefits: (p.benefits && p.benefits.length > 0) ? p.benefits : (defaultProd.benefits || []),
+          customerReviews: (p.customerReviews && p.customerReviews.length > 0) ? p.customerReviews : (defaultProd.customerReviews || []),
+          images: (p.images && p.images.length > 0) ? p.images : (p.image ? [p.image] : (defaultProd.images || []))
         };
       });
     }

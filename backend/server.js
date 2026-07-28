@@ -18,31 +18,36 @@ const getDb = () => readDb();
 // 1. PRODUCTS & CATEGORIES API
 // -------------------------------------------------------------
 app.get('/api/products', (req, res) => {
-  const db = getDb();
-  let products = db.products || [];
-  const { category, search, brand } = req.query;
+  try {
+    const db = getDb();
+    let products = (db && db.products && Array.isArray(db.products)) ? db.products : [];
+    const { category, search, brand } = req.query;
 
-  if (category) {
-    const catLower = String(category).toLowerCase();
-    products = products.filter(p => (p.category || '').toLowerCase().includes(catLower));
+    if (category) {
+      const catLower = String(category).toLowerCase();
+      products = products.filter(p => (p.category || '').toLowerCase().includes(catLower));
+    }
+
+    if (brand) {
+      const brandLower = String(brand).toLowerCase();
+      products = products.filter(p => (p.brand || '').toLowerCase().includes(brandLower));
+    }
+
+    if (search) {
+      const searchLower = String(search).toLowerCase();
+      products = products.filter(p => 
+        (p.name || '').toLowerCase().includes(searchLower) ||
+        (p.description || '').toLowerCase().includes(searchLower) ||
+        (p.brand || '').toLowerCase().includes(searchLower) ||
+        (p.sku || '').toLowerCase().includes(searchLower)
+      );
+    }
+
+    res.json(products);
+  } catch (err) {
+    console.error("Error serving /api/products:", err);
+    res.status(500).json({ error: "Failed to fetch products", details: err.message });
   }
-
-  if (brand) {
-    const brandLower = String(brand).toLowerCase();
-    products = products.filter(p => (p.brand || '').toLowerCase().includes(brandLower));
-  }
-
-  if (search) {
-    const searchLower = String(search).toLowerCase();
-    products = products.filter(p => 
-      (p.name || '').toLowerCase().includes(searchLower) ||
-      (p.description || '').toLowerCase().includes(searchLower) ||
-      (p.brand || '').toLowerCase().includes(searchLower) ||
-      (p.sku || '').toLowerCase().includes(searchLower)
-    );
-  }
-
-  res.json(products);
 });
 
 app.get('/api/categories', (req, res) => {

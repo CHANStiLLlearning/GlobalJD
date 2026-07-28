@@ -1,26 +1,111 @@
 {
   "products": [
     {
+      "id": 1785211829314,
+      "name": "Coach Gallery Tote Bag in Crossgrain Leather",
+      "brand": "Sony",
+      "sku": "APL-MBA15-M3-512-SG",
+      "price": 899,
+      "originalPrice": 1000,
+      "category": "electronics",
+      "weight": "750 g",
+      "warranty": "1-Year Apple Limited Warranty",
+      "description": "hi",
+      "image": "https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80](https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80)",
+      "tag": {
+        "type": "bestseller",
+        "label": "Best Seller"
+      },
+      "inStock": true,
+      "rating": "5.0 (1 review)",
+      "ratingValue": 5
+    },
+    {
       "id": 1785211028630,
       "name": "Coach Gallery Tote Bag in Crossgrain Leather",
       "brand": "Coach",
+      "category": "Fashion > Bags",
       "sku": "",
       "price": 222,
       "originalPrice": 3333,
-      "category": "Fashion > Bags",
+      "discount": "20% Off",
+      "stockStatus": "In Stock (120 Units)",
+      "stockCount": 120,
+      "inStock": true,
+      "colors": [
+        "Black",
+        "Silver",
+        "Midnight Blue"
+      ],
+      "sizes": [
+        "One Size"
+      ],
       "weight": "250 g",
+      "features": [
+        "Industry-leading Noise Cancellation with dual processors",
+        "Bluetooth 5.3 multi-point connectivity",
+        "30-hour battery life with 3-min quick charging for 3 hours",
+        "Crystal clear hands-free calling with 4 beamforming microphones"
+      ],
+      "specifications": {
+        "Bluetooth Version": "5.3",
+        "Battery Life": "30 Hours",
+        "Charging": "USB-C Fast Charging",
+        "Driver Size": "30 mm",
+        "Frequency Response": "4Hz - 40,000Hz",
+        "Impedance": "48 Ohm"
+      },
+      "packageIncludes": [
+        "Sony Headphones",
+        "USB-C Charging Cable",
+        "3.5mm Audio Cable",
+        "Carrying Case",
+        "User Manual"
+      ],
+      "benefits": [
+        "Unmatched comfort for long flights and work sessions",
+        "Immersive audiophile-grade high-res audio playback",
+        "Smart touch controls and wear detection",
+        "Ultra-lightweight ergonomic headband design"
+      ],
       "warranty": "2-Year Limited Manufacturer Warranty",
-      "description": "\n\n1\nFind in logs\nCtrlF\nRunning build in Washington, D.C., USA (East) – iad1\nBuild machine configuration: 2 cores, 8 GB\nCloning github.com/CHANStiLLlearning/GlobalJD (Branch: main, Commit: 1bf4544)\nSkipping build cache, deployment was triggered without cache.\nCloning completed: 441.000ms\nRunning \"vercel build\"\nVercel CLI 56.5.0\nInstalling dependencies...\nadded 40 packages in 5s\n15 packages are looking for funding\n  run `npm fund` for details\nsh: line 1: cd: frontend: No such file or directory\nError: Command \"cd frontend && npm run build\" exited with 1",
+      "rating": "5.0 (1 review)",
+      "ratingValue": 5,
+      "customerReviews": [
+        {
+          "id": 101,
+          "username": "John Doe",
+          "rating": 5,
+          "date": "2026-07-20",
+          "comment": "Amazing sound quality and very comfortable! The active noise cancellation cuts out plane engine noise completely."
+        },
+        {
+          "id": 102,
+          "username": "Alice Smith",
+          "rating": 5,
+          "date": "2026-07-18",
+          "comment": "Battery lasts all week with daily commute usage. Very happy with this purchase."
+        },
+        {
+          "id": 103,
+          "username": "Marcus Vance",
+          "rating": 4,
+          "date": "2026-07-10",
+          "comment": "Sleek look and superb sound. Carrying case is top quality as well."
+        }
+      ],
+      "shippingInfo": "Free Express Shipping. Delivery in 3–5 Business Days.",
+      "returnPolicy": "30-Day Free Returns & Easy Exchanges",
       "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80"
+      ],
+      "description": "\n\n1\nFind in logs\nCtrlF\nRunning build in Washington, D.C., USA (East) – iad1\nBuild machine configuration: 2 cores, 8 GB\nCloning github.com/CHANStiLLlearning/GlobalJD (Branch: main, Commit: 1bf4544)\nSkipping build cache, deployment was triggered without cache.\nCloning completed: 441.000ms\nRunning \"vercel build\"\nVercel CLI 56.5.0\nInstalling dependencies...\nadded 40 packages in 5s\n15 packages are looking for funding\n  run `npm fund` for details\nsh: line 1: cd: frontend: No such file or directory\nError: Command \"cd frontend && npm run build\" exited with 1",
       "tag": {
         "text": "Flash Deal",
         "type": "discount",
         "label": "-20%"
-      },
-      "inStock": true,
-      "discount": "20% Off",
-      "rating": "5.0 (1 review)",
-      "ratingValue": 5
+      }
     },
     {
       "id": 1785209533514,
