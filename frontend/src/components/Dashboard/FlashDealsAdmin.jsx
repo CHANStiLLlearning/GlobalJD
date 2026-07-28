@@ -88,11 +88,15 @@ export default function FlashDealsAdmin() {
 
   const handleSave = async (formData) => {
     try {
+      const orig = formData.originalPrice ? Number(formData.originalPrice) : (formData.price ? Number(formData.price) * 1.25 : null);
+      const curr = formData.price ? Number(formData.price) : 0;
+      const dynamicPct = (orig && curr && orig > curr) ? Math.round(((orig - curr) / orig) * 100) : 25;
+
       const payload = {
         ...formData,
-        discount: formData.discount || "25% Off",
-        originalPrice: formData.originalPrice || (formData.price ? Number(formData.price) * 1.25 : null),
-        tag: { text: "Flash Deal", type: "discount", label: "-25%" }
+        originalPrice: orig,
+        discount: formData.discount || `${dynamicPct}% Off`,
+        tag: { text: "Flash Deal", type: "discount", label: `-${dynamicPct}%` }
       };
 
       if (editingProduct) {
@@ -221,8 +225,9 @@ export default function FlashDealsAdmin() {
                   </tr>
                 ) : (
                   filteredDeals.map((deal) => {
-                    const discountBadge = deal.discount || (deal.tag?.label || deal.tag?.text || '25% Off');
                     const origPrice = deal.originalPrice || (deal.price ? deal.price * 1.25 : 0);
+                    const dynamicPct = origPrice > deal.price ? Math.round(((origPrice - deal.price) / origPrice) * 100) : 25;
+                    const discountBadge = deal.discount || (deal.tag?.label || deal.tag?.text || `${dynamicPct}% Off`);
 
                     return (
                       <tr key={deal.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
@@ -305,7 +310,7 @@ export default function FlashDealsAdmin() {
         onClose={() => setIsModalOpen(false)} 
         onSave={handleSave} 
         product={editingProduct} 
-        initialTag={{ type: 'discount', label: '-25%', text: 'Flash Deal' }}
+        initialTag={{ type: 'discount', label: 'Dynamic %', text: 'Flash Deal' }}
       />
     </div>
   );

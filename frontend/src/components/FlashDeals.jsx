@@ -162,7 +162,7 @@ const FlashDeals = ({ onAddToCart }) => {
             Today's Top Discounted Deals ({filteredProducts.length})
           </h2>
           <span style={{ fontSize: '13px', color: '#dc2626', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Flame size={16} fill="#dc2626" /> Up to 25% Off Price Cuts
+            <Flame size={16} fill="#dc2626" /> Limited Time Flash Price Cuts
           </span>
         </div>
 
@@ -186,7 +186,15 @@ const FlashDeals = ({ onAddToCart }) => {
               >
                 <div className="product-image" style={{ height: '260px', background: '#f8fafc', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <span style={{ position: 'absolute', top: '12px', left: '12px', background: 'var(--jd-red)', color: '#fff', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', zIndex: 2, boxShadow: '0 2px 6px rgba(226,35,26,0.3)' }}>
-                    {product.discount || 'FLASH DEAL'}
+                    {(() => {
+                      if (product.discount) return product.discount;
+                      const orig = product.originalPrice;
+                      const curr = product.price;
+                      if (orig && curr && orig > curr) {
+                        return `${Math.round(((orig - curr) / orig) * 100)}% OFF`;
+                      }
+                      return 'FLASH DEAL';
+                    })()}
                   </span>
                   {product.brand && (
                     <span style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(15,23,42,0.75)', color: '#fff', padding: '3px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', backdropFilter: 'blur(4px)', zIndex: 2 }}>
