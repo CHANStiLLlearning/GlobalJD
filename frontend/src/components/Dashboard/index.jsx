@@ -28,44 +28,51 @@ export default function Dashboard({ setCurrentUser }) {
   const fetchOverviewData = (isManual = false) => {
     if (isManual) setIsRefreshing(true);
 
-    Promise.all([
-      fetch(`${API_BASE}/api/products`).then(res => res.json()),
-      fetch(`${API_BASE}/api/orders`).then(res => res.json()),
-      fetch(`${API_BASE}/api/analytics`).then(res => res.json())
-    ])
-      .then(([products, orders, analytics]) => {
-        const totalProducts = analytics.totalProducts;
-        const inStockCount = analytics.inStockCount;
-        const outOfStockCount = analytics.outOfStockCount;
-        const uniqueCategories = Object.keys(analytics.categoryBreakdown).length;
-        const activePromotions = products.filter(p => p.tag && p.tag.type === 'discount').length;
+    fetch(`${API_BASE}/api/admin/dashboard`)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        // Requirement 9: Console.log dashboard API response before rendering
+        console.log('[FRONTEND DASHBOARD API RESPONSE]:', data);
+
+        const statsData = data.stats || {};
+        const ordersData = Array.isArray(data.recentOrders) ? data.recentOrders : [];
 
         const dynamicStats = [
-          { title: "Total Products", value: totalProducts, icon: <Package size={24} />, trend: "+2 added", color: "#3b82f6" },
-          { title: "In Stock Items", value: inStockCount, icon: <CheckCircle size={24} />, trend: `${inStockCount} available`, color: "#10b981" },
-          { title: "Out of Stock", value: outOfStockCount, icon: <XCircle size={24} />, trend: outOfStockCount > 0 ? `${outOfStockCount} restock needed` : "All in stock", color: outOfStockCount > 0 ? "#ef4444" : "#6b7280" },
-          { title: "Total Orders", value: orders.length, icon: <Radio size={24} />, trend: "Live API", color: "#8b5cf6" },
-          { title: "Revenue (Est.)", value: analytics.totalRevenue, icon: <DollarSign size={24} />, trend: "Realtime Sync", color: "#10b981" },
-          { title: "Active Promotions", value: activePromotions, icon: <Tags size={24} />, trend: "Promotions Active", color: "#f97316" }
+          { title: "Total Products", value: statsData.totalProducts || 0, icon: <Package size={24} />, trend: "Active Catalog", color: "#3b82f6" },
+          { title: "In Stock Items", value: statsData.inStockCount || 0, icon: <CheckCircle size={24} />, trend: `${statsData.inStockCount || 0} available`, color: "#10b981" },
+          { title: "Out of Stock", value: statsData.outOfStockCount || 0, icon: <XCircle size={24} />, trend: (statsData.outOfStockCount || 0) > 0 ? `${statsData.outOfStockCount} restock needed` : "All in stock", color: (statsData.outOfStockCount || 0) > 0 ? "#ef4444" : "#6b7280" },
+          { title: "Total Orders", value: statsData.totalOrders !== undefined ? statsData.totalOrders : ordersData.length, icon: <Radio size={24} />, trend: "Live Database", color: "#8b5cf6" },
+          { title: "Revenue (Est.)", value: typeof statsData.totalRevenue === 'number' ? `$${statsData.totalRevenue.toFixed(2)}` : (statsData.totalRevenue || "$0.00"), icon: <DollarSign size={24} />, trend: "Realtime Sync", color: "#10b981" },
+          { title: "Active Customers", value: statsData.totalCustomers || 1, icon: <Tags size={24} />, trend: "Registered Users", color: "#f97316" }
         ];
 
         setStats(dynamicStats);
-
-        // Filter orders by time window
-        let filteredOrders = orders;
-        if (timeFilter === 'today') filteredOrders = orders.slice(0, 3);
-        if (timeFilter === '7days') filteredOrders = orders.slice(0, 7);
-
-        setRecentOrders(filteredOrders);
+        setRecentOrders(ordersData);
         setAnalysisTime(new Date().toLocaleTimeString());
         setLastSyncTime(new Date());
         setLoading(false);
         if (isManual) setTimeout(() => setIsRefreshing(false), 500);
       })
       .catch(err => {
-        console.error("Failed to fetch overview data:", err);
-        setLoading(false);
-        if (isManual) setIsRefreshing(false);
+        console.error("Failed to fetch /api/admin/dashboard, falling back to /api/orders:", err);
+        // Fallback to legacy orders API if endpoint is unreachable
+        fetch(`${API_BASE}/api/orders`)
+          .then(res => res.json())
+          .then(orders => {
+            if (Array.isArray(orders)) {
+              setRecentOrders(orders);
+            }
+            setLoading(false);
+            if (isManual) setIsRefreshing(false);
+          })
+          .catch(e => {
+            console.error("Fallback order fetch failed:", e);
+            setLoading(false);
+            if (isManual) setIsRefreshing(false);
+          });
       });
   };
 

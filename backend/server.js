@@ -337,6 +337,61 @@ app.get('/api/analytics', async (req, res) => {
 });
 
 // ---------------------------------------------------------------
+// ADMIN DASHBOARD API (/api/admin/dashboard)
+// ---------------------------------------------------------------
+app.get('/api/admin/dashboard', async (req, res) => {
+  try {
+    const products = useSupabase() ? await db.getProducts() : (db.readJsonFallback().products || []);
+    const orders = useSupabase() ? await db.getOrders() : (db.readJsonFallback().orders || []);
+    const users = useSupabase() ? await db.getUsers() : (db.readJsonFallback().users || []);
+
+    const totalOrders = orders.length;
+    const totalCustomers = users.filter(u => u.role !== 'admin').length || users.length;
+    const totalRevenue = orders.reduce((sum, o) => {
+      const num = parseFloat(String(o.amount || o.total || '0').replace('$', '').replace(',', '')) || 0;
+      return sum + num;
+    }, 0);
+
+    const recentOrders = orders.slice(0, 10).map(o => ({
+      id: o.id,
+      orderNumber: o.id || o.orderNumber,
+      customer: o.customer,
+      email: o.email || o.customer,
+      product: o.product || 'Purchased Items',
+      total: typeof o.amount === 'number' ? o.amount : parseFloat(String(o.amount || o.total || '0').replace('$', '')) || 0,
+      amount: typeof o.amount === 'string' ? o.amount : `$${(o.amount || o.total || 0).toFixed(2)}`,
+      status: o.status || 'Processing',
+      createdAt: o.created_at || o.date || new Date().toISOString(),
+      date: o.date || (o.created_at ? o.created_at.split('T')[0] : new Date().toISOString().split('T')[0])
+    }));
+
+    const responseData = {
+      stats: {
+        totalOrders,
+        totalCustomers,
+        totalRevenue: Number(totalRevenue.toFixed(2)),
+        totalProducts: products.length,
+        inStockCount: products.filter(p => p.inStock !== false).length,
+        outOfStockCount: products.filter(p => p.inStock === false).length
+      },
+      recentOrders
+    };
+
+    console.log('[BACKEND DASHBOARD QUERY RESULTS]:', {
+      totalOrders,
+      totalCustomers,
+      totalRevenue: responseData.stats.totalRevenue,
+      recentOrdersCount: recentOrders.length
+    });
+
+    res.json(responseData);
+  } catch (err) {
+    console.error('GET /api/admin/dashboard error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch admin dashboard data', details: err.message });
+  }
+});
+
+// ---------------------------------------------------------------
 // 4. ORDERS API
 // ---------------------------------------------------------------
 app.get('/api/orders', async (req, res) => {
@@ -355,31 +410,38 @@ app.get('/api/orders', async (req, res) => {
 app.post('/api/orders', async (req, res) => {
   try {
     const { customer, product, amount, status } = req.body;
-    if (!customer || !product || !amount) return res.status(400).json({ error: 'Missing required order fields' });
-
-    if (useSupabase()) {
-      const orders = await db.getOrders();
-      const newOrder = {
-        id: `#ORD-${String(orders.length + 1).padStart(3, '0')}`,
-        customer, product, amount,
-        status: status || 'Processing',
-        date: new Date().toISOString().split('T')[0]
-      };
-      const saved = await db.insertOrder(newOrder);
-      return res.status(201).json(saved);
+    if (!customer || !product || !amount) {
+      console.warn('[BACKEND ORDER CREATION FAILED]: Missing required fields', req.body);
+      return res.status(400).json({ error: 'Missing required order fields' });
     }
 
-    const data = db.readJsonFallback();
+    const timestamp = Date.now().toString().slice(-5);
+    const orderId = `#ORD-${timestamp}`;
+
     const newOrder = {
-      id: `#ORD-${String(data.orders.length + 1).padStart(3, '0')}`,
-      customer, product, amount,
+      id: orderId,
+      customer: String(customer).trim(),
+      product: String(product).trim(),
+      amount: typeof amount === 'number' ? `$${amount.toFixed(2)}` : String(amount),
       status: status || 'Processing',
       date: new Date().toISOString().split('T')[0]
     };
-    data.orders.unshift(newOrder);
-    db.saveJsonFallback(data);
-    res.status(201).json(newOrder);
+
+    let saved;
+    if (useSupabase()) {
+      saved = await db.insertOrder(newOrder);
+    } else {
+      const data = db.readJsonFallback();
+      if (!data.orders) data.orders = [];
+      data.orders.unshift(newOrder);
+      db.saveJsonFallback(data);
+      saved = newOrder;
+    }
+
+    console.log('[BACKEND ORDER CREATION]: Order created successfully:', saved);
+    res.status(201).json(saved);
   } catch (err) {
+    console.error('[BACKEND ORDER CREATION ERROR]:', err.message);
     res.status(500).json({ error: 'Failed to create order', details: err.message });
   }
 });

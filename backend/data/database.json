@@ -559,6 +559,14 @@
   ],
   "orders": [
     {
+      "id": "#ORD-91104",
+      "customer": "john_doe",
+      "product": "Sony WH-1000XM5 Wireless Headphones",
+      "amount": "$299.99",
+      "status": "Processing",
+      "date": "2026-07-28"
+    },
+    {
       "id": "#ORD-002",
       "customer": "chan@gmail.com",
       "product": "Ultralight Laptop Pro",

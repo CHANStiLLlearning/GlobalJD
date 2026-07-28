@@ -34,16 +34,27 @@ export default function Checkout({ currentUser, clearCart }) {
     setTimeout(async () => {
       try {
         for (const item of items) {
-          await fetch(`${API_BASE}/api/orders`, {
+          const orderPayload = {
+            customer: currentUser.username,
+            product: item.name,
+            amount: `$${item.price.toFixed(2)}`,
+            status: 'Processing'
+          };
+          
+          console.log('[FRONTEND CHECKOUT]: Placing order...', orderPayload);
+
+          const res = await fetch(`${API_BASE}/api/orders`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              customer: currentUser.username,
-              product: item.name,
-              amount: `$${item.price.toFixed(2)}`,
-              status: 'Processing'
-            })
+            body: JSON.stringify(orderPayload)
           });
+          
+          const responseData = await res.json();
+          console.log('[FRONTEND CHECKOUT]: API Response:', responseData);
+
+          if (!res.ok) {
+            throw new Error(responseData.error || 'Failed to record order');
+          }
         }
         
         if (fromCart && clearCart) {
@@ -59,8 +70,8 @@ export default function Checkout({ currentUser, clearCart }) {
         }, 1500);
         
       } catch (err) {
-        console.error("Checkout failed:", err);
-        alert("Payment failed. Please try again.");
+        console.error("[FRONTEND CHECKOUT ERROR]: Checkout failed:", err);
+        alert(`Payment failed: ${err.message || 'Please try again.'}`);
         setProcessing(false);
       }
     }, 2000);
