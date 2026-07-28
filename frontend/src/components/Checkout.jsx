@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, CreditCard, Truck, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, CreditCard, Truck, ShieldCheck, QrCode, Smartphone } from 'lucide-react';
 import { API_BASE } from '../config/api';
 
 export default function Checkout({ currentUser, clearCart }) {
@@ -8,6 +8,7 @@ export default function Checkout({ currentUser, clearCart }) {
   const navigate = useNavigate();
   const [processing, setProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('khqr');
 
   // If no items in state, bounce back
   const items = location.state?.items || [];
@@ -134,47 +135,91 @@ export default function Checkout({ currentUser, clearCart }) {
           </div>
 
           {/* Payment Form */}
-          <form onSubmit={handlePayment} style={{ background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <div style={{ background: '#fff', borderRadius: '8px', border: '1px solid #eaeaea', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
             <h3 style={{ margin: '0 0 20px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CreditCard size={20} color="var(--jd-red)" /> Payment Method
             </h3>
             
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>Card Number</label>
-              <input type="text" placeholder="0000 0000 0000 0000" maxLength="19" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '16px' }} required />
+            {/* Payment Method Selector */}
+            <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+              <div 
+                onClick={() => setPaymentMethod('card')}
+                style={{ 
+                  flex: 1, padding: '16px', border: paymentMethod === 'card' ? '2px solid var(--jd-red)' : '1px solid #d1d5db', 
+                  borderRadius: '8px', cursor: 'pointer', textAlign: 'center', 
+                  background: paymentMethod === 'card' ? '#fef2f2' : '#fff', transition: 'all 0.2s'
+                }}
+              >
+                <CreditCard size={24} color={paymentMethod === 'card' ? 'var(--jd-red)' : '#6b7280'} style={{ margin: '0 auto 8px' }} />
+                <div style={{ fontWeight: paymentMethod === 'card' ? 'bold' : 'normal', color: paymentMethod === 'card' ? 'var(--jd-red)' : '#374151' }}>Credit / Debit Card</div>
+              </div>
+              <div 
+                onClick={() => setPaymentMethod('khqr')}
+                style={{ 
+                  flex: 1, padding: '16px', border: paymentMethod === 'khqr' ? '2px solid var(--jd-red)' : '1px solid #d1d5db', 
+                  borderRadius: '8px', cursor: 'pointer', textAlign: 'center', 
+                  background: paymentMethod === 'khqr' ? '#fef2f2' : '#fff', transition: 'all 0.2s'
+                }}
+              >
+                <QrCode size={24} color={paymentMethod === 'khqr' ? 'var(--jd-red)' : '#6b7280'} style={{ margin: '0 auto 8px' }} />
+                <div style={{ fontWeight: paymentMethod === 'khqr' ? 'bold' : 'normal', color: paymentMethod === 'khqr' ? 'var(--jd-red)' : '#374151' }}>KHQR / Bank App</div>
+              </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>Expiry Date</label>
-                <input type="text" placeholder="MM/YY" maxLength="5" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box' }} required />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>CVV</label>
-                <input type="text" placeholder="123" maxLength="4" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box' }} required />
-              </div>
-            </div>
-            
-            <button 
-              type="submit"
-              disabled={processing}
-              style={{ 
-                width: '100%', padding: '16px', background: 'var(--jd-red)', color: '#fff', 
-                border: 'none', borderRadius: '4px', fontSize: '18px', fontWeight: 'bold',
-                cursor: processing ? 'not-allowed' : 'pointer', opacity: processing ? 0.7 : 1,
-                display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'
-              }}
-            >
-              {processing ? (
-                <>Processing...</>
+            <form onSubmit={handlePayment}>
+              {paymentMethod === 'card' ? (
+                <>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>Card Number</label>
+                    <input type="text" placeholder="0000 0000 0000 0000" maxLength="19" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '16px' }} required />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>Expiry Date</label>
+                      <input type="text" placeholder="MM/YY" maxLength="5" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box' }} required />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '13px', color: '#666', marginBottom: '4px' }}>CVV</label>
+                      <input type="text" placeholder="123" maxLength="4" style={{ width: '100%', padding: '10px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box' }} required />
+                    </div>
+                  </div>
+                </>
               ) : (
-                <><ShieldCheck size={20} /> Pay ${total.toFixed(2)}</>
+                <div style={{ textAlign: 'center', marginBottom: '24px', padding: '24px', background: '#f8fafc', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
+                  <h4 style={{ margin: '0 0 16px 0', color: '#0f172a', fontSize: '16px' }}>Scan with ABA, ACLEDA, or any KHQR App</h4>
+                  <div style={{ background: '#fff', display: 'inline-block', padding: '16px', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', marginBottom: '16px' }}>
+                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=KHQR_PAY_${total.toFixed(2)}`} alt="KHQR Code" style={{ width: '150px', height: '150px' }} />
+                  </div>
+                  <div style={{ fontSize: '14px', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Smartphone size={16} /> Open your banking app to scan and pay
+                  </div>
+                </div>
               )}
-            </button>
-            <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: '12px', marginTop: '12px' }}>
-              <i className="fas fa-lock"></i> SSL Secured Payment
-            </p>
-          </form>
+              
+              <button 
+                type="submit"
+                disabled={processing}
+                style={{ 
+                  width: '100%', padding: '16px', background: 'var(--jd-red)', color: '#fff', 
+                  border: 'none', borderRadius: '4px', fontSize: '18px', fontWeight: 'bold',
+                  cursor: processing ? 'not-allowed' : 'pointer', opacity: processing ? 0.7 : 1,
+                  display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'
+                }}
+              >
+                {processing ? (
+                  <>Processing...</>
+                ) : paymentMethod === 'khqr' ? (
+                  <><ShieldCheck size={20} /> I have paid ${total.toFixed(2)} via KHQR</>
+                ) : (
+                  <><ShieldCheck size={20} /> Pay ${total.toFixed(2)}</>
+                )}
+              </button>
+              <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: '12px', marginTop: '12px' }}>
+                <i className="fas fa-lock"></i> SSL Secured Payment
+              </p>
+            </form>
+          </div>
         </div>
 
         {/* Right Col - Order Summary */}
